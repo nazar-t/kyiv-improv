@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabaseClient';
-import type { Student, EventParticipant } from '@/lib/supabaseClient';
+import { supabaseServer } from '@/lib/supabaseServerClient'; // Use server client
+import type { EventParticipant } from '@/lib/supabaseClient'; // Remove unused Student type
 
 // Define the expected request body structure
 interface SubmitRequestBody {
@@ -37,8 +37,8 @@ export async function POST(request: Request) {
         // 1. Find or Create Student
         let studentId: number;
 
-        // Check if student exists
-        const { data: existingStudent, error: findError } = await supabase
+        // Check if student exists using server client
+        const { data: existingStudent, error: findError } = await supabaseServer
             .from('Students') // Use your actual table name
             .select('id')
             .eq('email', email)
@@ -53,9 +53,9 @@ export async function POST(request: Request) {
             console.log(`Found existing student with ID: ${existingStudent.id}`);
             studentId = existingStudent.id;
             // Optionally, update name/instagram if they changed? For now, just use existing ID.
-            // const { error: updateError } = await supabase
+            // const { error: updateError } = await supabaseServer // Use server client if uncommented
             //     .from('Students')
-            //     .update({ first_name: firstName, last_name: lastName, instagram: instagram || null })
+            //     .update({ first_name: firstName, last_name: lastName, instagram: cleanedInstagram }) // Use cleaned value if uncommented
             //     .eq('id', studentId);
             // if (updateError) console.warn("Could not update existing student info:", updateError);
 
@@ -64,8 +64,8 @@ export async function POST(request: Request) {
             // Clean instagram input before inserting
             const cleanedInstagram = instagram ? instagram.replace(/^[#@]/, '').trim() : null;
             console.log(`Creating new student for email: ${email} with cleaned instagram: ${cleanedInstagram}`);
-            // Create new student if not found
-            const { data: newStudent, error: createError } = await supabase
+            // Create new student if not found using server client
+            const { data: newStudent, error: createError } = await supabaseServer
                 .from('Students')
                 .insert({
                     first_name: firstName,
@@ -88,11 +88,11 @@ export async function POST(request: Request) {
             console.log(`Created new student with ID: ${studentId}`);
         }
 
-        // 2. Check Event Capacity (Server-side check for race conditions)
+        // 2. Check Event Capacity (Server-side check for race conditions) using server client
         console.log(`Checking capacity for event ID: ${selectedEventId}`);
-        const { data: eventData, error: eventError } = await supabase
+        const { data: eventData, error: eventError } = await supabaseServer
             .from('Events')
-            .select('max_capacity')
+            .select('max_capacity, price') // Also fetch price here for LiqPay later
             .eq('id', selectedEventId)
             .single();
 
@@ -102,7 +102,7 @@ export async function POST(request: Request) {
         }
 
         if (typeof eventData.max_capacity === 'number') {
-            const { count: currentParticipants, error: countError } = await supabase
+            const { count: currentParticipants, error: countError } = await supabaseServer
                 .from('Event Participants')
                 .select('*', { count: 'exact', head: true }) // Efficiently get count
                 .eq('event_id', selectedEventId)
@@ -131,7 +131,7 @@ export async function POST(request: Request) {
             payment_status: 'pending' // Initial status
         };
 
-        const { data: newParticipant, error: participantError } = await supabase
+        const { data: newParticipant, error: participantError } = await supabaseServer
             .from('Event Participants') // Use your actual table name
             .insert(participantData)
             .select() // Select the newly created record
@@ -154,7 +154,8 @@ export async function POST(request: Request) {
         console.log("Successfully created participant record:", newParticipant);
 
         // TODO: Add LiqPay integration here
-        // 1. Get event price from eventData (fetched earlier or fetch again)
+        // 1. Get event price from eventData (fetched above)
+        const eventPrice = eventData.price;
         // 2. Generate LiqPay payment parameters (amount, currency, order_id (use newParticipant.id), description, etc.)
         // 3. Generate LiqPay signature
         // 4. Return LiqPay data/signature to the frontend
@@ -162,11 +163,13 @@ export async function POST(request: Request) {
         // For now, just return success
         return NextResponse.json({
             message: 'Registration successful, proceed to payment.',
-            participantId: newParticipant.id // Send back the ID for reference
+            participantId: newParticipant.id, // Send back the ID for reference
+            // We might need to send LiqPay data/signature back here later
         }, { status: 201 }); // 201 Created
 
-    } catch (error: any) {
+    } catch (error: unknown) { // Use unknown instead of any
+        const message = error instanceof Error ? error.message : 'An unexpected error occurred.';
         console.error("Unhandled error during submission:", error);
-        return NextResponse.json({ error: error.message || 'An unexpected error occurred.' }, { status: 500 });
+        return NextResponse.json({ error: message }, { status: 500 });
     }
 }

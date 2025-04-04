@@ -34,7 +34,7 @@ export interface Event {
   date?: string | null; // Assuming date type maps to string initially
   time?: string | null; // Assuming time type maps to string initially
   price: number; // Assuming numeric maps to number
-  max_capacity?: number | null; // Optional field
+  max_capacity?: number | null; // Added based on schema discussion
   created_at?: string;
 }
 

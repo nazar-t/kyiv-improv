@@ -1,114 +1,46 @@
-'use client'; // This component will run on the client side
+'use client'; // This component is now a Client Component receiving props
 
-import React, { useState, useEffect, FormEvent } from 'react';
-import { supabase } from '@/lib/supabaseClient';
-import type { Event, EventParticipant } from '@/lib/supabaseClient'; // Assuming types are defined here
+import React, { useState, FormEvent } from 'react';
+// No longer need supabase client here
+import type { Event } from '@/lib/supabaseClient'; // Keep Event type if needed, remove EventParticipant
 
-// Interface to hold combined event data with participant count
+// Interface for combined event data (remains the same)
 interface EventWithCount extends Event {
   participant_count: number;
 }
 
-export default function RegistrationForm() {
-  // State for form inputs
+// Define props expected from the server component
+interface RegistrationFormProps {
+  initialEvents: EventWithCount[];
+  initialError: string | null;
+}
+
+export default function RegistrationForm({ initialEvents, initialError }: RegistrationFormProps) {
+  // State for form inputs (remains the same)
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [instagram, setInstagram] = useState('');
   const [selectedEventId, setSelectedEventId] = useState<number | null>(null);
 
-  // State for events data, loading, and errors
-  const [events, setEvents] = useState<EventWithCount[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  // Initialize state from props, remove client-side loading state
+  const [events] = useState<EventWithCount[]>(initialEvents); // Use initialEvents directly
+  const [error] = useState<string | null>(initialError); // Use initialError directly
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [submitError, setSubmitError] = useState<string | null>(null);
 
-  // Fetch events and participant counts on component mount
-  useEffect(() => {
-    const fetchEvents = async () => {
-      setIsLoading(true);
-      setError(null);
+  // Remove the useEffect hook for client-side data fetching
 
-      try {
-        // Calculate date range (today to 14 days from now)
-        const today = new Date();
-        const twoWeeksFromNow = new Date(today);
-        twoWeeksFromNow.setDate(today.getDate() + 14);
-
-        // Format dates for Supabase query (YYYY-MM-DD)
-        const todayStr = today.toISOString().split('T')[0];
-        const twoWeeksStr = twoWeeksFromNow.toISOString().split('T')[0];
-
-        // Fetch events within the date range
-        const { data: eventsData, error: eventsError } = await supabase
-          .from('Events') // Use your actual table name 'Events'
-          .select('*')
-          .gte('date', todayStr) // Greater than or equal to today
-          .lte('date', twoWeeksStr) // Less than or equal to two weeks from now
-          .order('date', { ascending: true });
-
-        if (eventsError) throw eventsError;
-        if (!eventsData) throw new Error('No events found.');
-
-        // Fetch participant counts for these events
-        const eventIds = eventsData.map(event => event.id);
-        const { data: countsData, error: countsError } = await supabase
-          .from('Event Participants') // Use your actual table name 'Event Participants'
-          .select('event_id, count: student_id(count)') // Count participants per event
-          .in('event_id', eventIds)
-          .in('payment_status', ['pending', 'paid']); // Count pending and paid participants towards capacity
-
-        if (countsError) throw countsError;
-
-        // Process the counts data into a Map
-        const countsMap = new Map<number, number>();
-        // Adjust based on actual Supabase response structure for aggregate counts if needed
-        // Assuming Supabase returns something like: [{ event_id: 1, count: 5 }, { event_id: 2, count: 10 }]
-        // If the structure is different (e.g., nested), this logic needs adjustment.
-        // Let's assume a simple structure for now. A common pattern might involve grouping.
-        // A safer approach might be to fetch all relevant participants and count client-side,
-        // or use an RPC function in Supabase for aggregation.
-        // For now, let's *assume* the .select() gives us a usable count directly or needs minimal processing.
-        // **REVISIT THIS LOGIC if counts are not working as expected.**
-        // Process the count data based on the inferred structure { event_id: any; count: { count: number; }[]; }
-        countsData?.forEach((value: { event_id: number; count: { count: number; }[] }) => {
-             // Access the count from the nested array
-             const count = value.count?.[0]?.count ?? 0;
-             countsMap.set(value.event_id, count);
-        });
-
-
-        // Combine event data with counts
-        const eventsWithCounts: EventWithCount[] = eventsData.map(event => ({
-          ...event,
-          participant_count: countsMap.get(event.id) || 0, // Use the map here
-        }));
-
-        setEvents(eventsWithCounts);
-
-      } catch (err: any) {
-        console.error("Error fetching events:", err);
-        setError(err.message || 'Failed to load events. Please try refreshing.');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchEvents();
-  }, []); // Empty dependency array means this runs once on mount
-
-  // Format date helper
+  // Format date helper (remove unused 'options' variable)
   const formatDate = (dateString: string | null | undefined): string => {
     if (!dateString) return '';
     try {
       const date = new Date(dateString);
-      const options: Intl.DateTimeFormatOptions = {
-        weekday: 'short', // e.g., 'Sat'
-        day: '2-digit',   // e.g., '25'
-        month: '2-digit', // e.g., '04'
-      };
-      // Adjust locale if needed, e.g., 'en-GB' for DD.MM
+      // const options: Intl.DateTimeFormatOptions = { // Removed unused variable
+      //   weekday: 'short',
+      //   day: '2-digit',
+      //   month: '2-digit',
+      // };
       return `${date.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit' })} (${date.toLocaleDateString('en-US', { weekday: 'short' })})`;
     } catch (e) {
       console.error("Error formatting date:", dateString, e);
@@ -116,7 +48,7 @@ export default function RegistrationForm() {
     }
   };
 
-  // Handle form submission
+  // Handle form submission (update catch block type)
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setSubmitStatus('submitting');
@@ -171,12 +103,16 @@ export default function RegistrationForm() {
       // setInstagram('');
       // setSelectedEventId(null);
 
-    } catch (err: any) {
+    } catch (err: unknown) { // Use unknown instead of any
+      const message = err instanceof Error ? err.message : 'An unexpected error occurred during submission.';
       console.error('Submission failed:', err);
-      setSubmitError(err.message || 'An unexpected error occurred during submission.');
+      setSubmitError(message);
       setSubmitStatus('error');
     }
   };
+
+  // Determine loading state based on initial props (no client-side loading needed)
+  const isLoading = false; // Data is pre-fetched
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
