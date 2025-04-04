@@ -3,6 +3,9 @@ import RegistrationForm from '@/components/RegistrationForm';
 import { supabaseServer } from '@/lib/supabaseServerClient'; // Use server client
 import type { Event } from '@/lib/supabaseClient'; // Import base Event type
 
+// Revalidate the page every 60 seconds
+export const revalidate = 60;
+
 // Define the combined type needed for the form
 interface EventWithCount extends Event {
   participant_count: number;
