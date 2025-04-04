@@ -155,7 +155,7 @@ export async function POST(request: Request) {
 
         // TODO: Add LiqPay integration here
         // 1. Get event price from eventData (fetched above)
-        const eventPrice = eventData.price;
+        //const eventPrice = eventData.price;
         // 2. Generate LiqPay payment parameters (amount, currency, order_id (use newParticipant.id), description, etc.)
         // 3. Generate LiqPay signature
         // 4. Return LiqPay data/signature to the frontend
