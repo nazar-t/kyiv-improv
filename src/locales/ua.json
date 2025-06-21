@@ -4,16 +4,17 @@
     "jams_workshops": "Джеми та Воркшопи",
     "faq": "FAQ",
     "about": "Про нас",
+    "home": "Головна",
     "shows": "Шоу",
     "merch": "Мерч",
-    "improv_club": "КЛУБ ІМПРОВІЗАЦІЇ"
+    "improv_club": "КІТ"
   },
   "homepage": {
     "welcome_title": "Ласкаво просимо до Клубу Імпровізації та Дебатів",
     "upcoming_student_offerings": "Майбутні Пропозиції для Студентів",
     "no_upcoming_student_offerings": "Майбутніх пропозицій для студентів не знайдено.",
-    "upcoming_spectator_events": "Майбутні Шоу для Глядачів",
-    "no_upcoming_spectator_events": "Майбутніх шоу для глядачів не знайдено.",
+    "upcoming_events": "Календар подій",
+    "no_upcoming_events": "Майбутніх шоу для глядачів не знайдено.",
     "our_core_courses": "Наші Основні Курси",
     "beginner_improv_title": "Імпровізація для Початківців",
     "beginner_improv_description": "Вивчіть основи імпровізації у веселій та підтримуючій атмосфері. Досвід не потрібен! Зосереджено на згоді, слуханні та базовій роботі зі сценою.",
@@ -26,7 +27,6 @@
     "full": "(Повно)",
     "sign_up": "Зареєструватись",
     "view_details": "Переглянути Деталі",
-    "highlights_carousel_title": "Карусель Основних Моментів",
     "contact_us_title": "Зв'язатися з нами",
     "location_info_title": "Розташування та Інформація",
     "address": "Адреса",

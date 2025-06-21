@@ -14,8 +14,8 @@ export interface Dictionary {
     welcome_title: string;
     upcoming_student_offerings: string;
     no_upcoming_student_offerings: string;
-    upcoming_spectator_events: string;
-    no_upcoming_spectator_events: string;
+    upcoming_events: string;
+    no_upcoming_events: string;
     our_core_courses: string;
     beginner_improv_title: string;
     beginner_improv_description: string;
@@ -28,7 +28,6 @@ export interface Dictionary {
     full: string;
     sign_up: string;
     view_details: string;
-    highlights_carousel_title: string;
     contact_us_title: string;
     location_info_title: string;
     address: string;

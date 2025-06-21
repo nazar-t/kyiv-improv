@@ -13,6 +13,7 @@ interface Dictionary {
     jams_workshops: string;
     faq: string;
     about: string;
+    home: string
     shows: string;
     merch: string;
     improv_club: string;
@@ -37,7 +38,7 @@ export default function Header({ dict, currentLocale }: HeaderProps) {
   };
 
   const locales = [
-    { code: 'en', name: 'English', flagCode: 'us' }, // Reverted to 'en' for routing, added 'flagCode' for display
+    { code: 'en', name: 'English', flagCode: 'us' },
     { code: 'ua', name: 'Українська', flagCode: 'ua' },
   ];
 
@@ -60,9 +61,9 @@ export default function Header({ dict, currentLocale }: HeaderProps) {
       {/* Navigation */}
       <nav className="hidden md:block">
         <ul className="flex space-x-8">
+          <li><Link href={`/${currentLocale}/`} className=" hover:text-yellow-300 transition-colors duration-200">{dict.header.home}</Link></li>
           <li><Link href={`/${currentLocale}/courses`} className="hover:text-accent-yellow transition-colors duration-200">{dict.header.courses}</Link></li>
           <li><Link href={`/${currentLocale}/jams-workshops`} className="hover:text-accent-yellow transition-colors duration-200">{dict.header.jams_workshops}</Link></li>
-          {/* Shows and Merch are hidden for now */}
           {/* <li><Link href={`/${currentLocale}/shows`} className="hover:text-accent-yellow transition-colors duration-200">{dict.header.shows}</Link></li> */}
           <li><Link href={`/${currentLocale}/faq`} className="hover:text-accent-yellow transition-colors duration-200">{dict.header.faq}</Link></li>
           <li><Link href={`/${currentLocale}/about`} className="hover:text-accent-yellow transition-colors duration-200">{dict.header.about}</Link></li>
@@ -70,13 +71,12 @@ export default function Header({ dict, currentLocale }: HeaderProps) {
         </ul>
       </nav>
 
-      {/* Language Switch Dropdown */}
-      <div className="relative">
-        <button
-          onClick={() => setDropdownOpen(!dropdownOpen)}
-          className="flex items-center space-x-2 font-bold text-text-light hover:text-accent-yellow transition-colors duration-200 focus:outline-none"
-        >
-          <span className={`fi fi-${currentLocaleData.flagCode} fis w-6 h-4 rounded shadow-md`}></span> {/* Use flagCode here */}
+      <div className="relative w-fit">
+         <button onClick={() => setDropdownOpen(!dropdownOpen)}className="flex w-full items-center justify-between p-2 space-x-4 font-bold text-text-light hover:text-accent-yellow transition-colors duration-200 focus:outline-none">
+          <div className="flex items-center">
+            <span className={`fi fi-${currentLocaleData.flagCode} fis w-6 h-4 rounded shadow-md`}></span>
+          </div>
+          
           <svg
             className={`w-4 h-4 transform transition-transform duration-200 ${dropdownOpen ? 'rotate-180' : 'rotate-0'}`}
             fill="none"
@@ -88,15 +88,15 @@ export default function Header({ dict, currentLocale }: HeaderProps) {
           </svg>
         </button>
         {dropdownOpen && (
-          <div className="absolute right-4 mt-2 w-fit bg-[#1a1a1a] border border-accent-yellow rounded-md shadow-lg z-10"> {/* Changed bg-primary-black bg-opacity-100 to bg-[#1a1a1a] */}
+          <div className="absolute right-0 mt-2 w-full bg-[#1a1a1a] border border-accent-yellow rounded-md shadow-lg z-10">
             {locales.map((locale) => (
               <button
                 key={locale.code}
                 onClick={() => switchLocale(locale.code)}
                 className="flex items-center space-x-2 w-full p-2 text-left text-text-light hover:bg-accent-yellow hover:text-primary-black transition-colors duration-200"
               >
-                <span className={`fi fi-${locale.flagCode} fis w-6 h-4 rounded shadow-md`}></span> {/* Re-added flag */}
-                <span>{locale.code === 'us' ? 'EN' : locale.code.toUpperCase()}</span> {/* Display EN/UA text */}
+                <span className={`fi fi-${locale.flagCode} fis w-6 h-4 rounded shadow-md`}></span>
+                <span>{locale.code === 'us' ? 'EN' : locale.code.toUpperCase()}</span>
               </button>
             ))}
           </div>

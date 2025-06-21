@@ -4,16 +4,17 @@
     "jams_workshops": "Jams & Workshops",
     "faq": "FAQ",
     "about": "About",
+    "home": "Home",
     "shows": "Shows",
     "merch": "Merch",
-    "improv_club": "IMPROV CLUB"
+    "improv_club": "KIT"
   },
   "homepage": {
     "welcome_title": "Welcome to Improv & Debate Club",
     "upcoming_student_offerings": "Upcoming Student Offerings",
     "no_upcoming_student_offerings": "No upcoming student offerings found.",
-    "upcoming_spectator_events": "Upcoming Spectator Events",
-    "no_upcoming_spectator_events": "No upcoming spectator events found.",
+    "upcoming_events": "Upcoming Events",
+    "no_upcoming_events": "No upcoming spectator events found.",
     "our_core_courses": "Our Core Courses",
     "beginner_improv_title": "Beginner Improv",
     "beginner_improv_description": "Learn the fundamentals of improvisation in a fun and supportive environment. No experience necessary! Focuses on agreement, listening, and basic scene work.",
@@ -26,7 +27,6 @@
     "full": "(Full)",
     "sign_up": "Sign Up",
     "view_details": "View Details",
-    "highlights_carousel_title": "Highlights Carousel",
     "contact_us_title": "Contact Us",
     "location_info_title": "Location & Info",
     "address": "Address",
