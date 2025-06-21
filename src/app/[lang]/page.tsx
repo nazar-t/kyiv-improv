@@ -1,5 +1,4 @@
 import React from 'react';
-import Link from 'next/link';
 import Card from '@/components/Card';
 import SectionWrapper from '@/components/SectionWrapper';
 import { supabaseServer } from '@/lib/supabaseServerClient';
@@ -141,7 +140,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
               <Card
                 key={event.id}
                 title={event.name}
-                description={`${event.date} ${event.time}\n${event.details}\n${dict.homepage.price}: ${event.price} UAH\n${dict.homepage.spots}: ${event.participant_count} / ${event.max_capacity || 'N/A'}${typeof event.max_capacity === 'number' && event.participant_count >= event.max_capacity ? ` (${dict.homepage.full})` : ''}`}
+                description={`${event.date} ${event.time}\n${event.details}\n${dict.courses_page.price}: ${event.price} UAH\n${dict.homepage.spots}: ${event.participant_count} / ${event.max_capacity || 'N/A'}${typeof event.max_capacity === 'number' && event.participant_count >= event.max_capacity ? ` (${dict.homepage.full})` : ''}`}
                 buttonText={dict.homepage.view_details}
                 buttonLink={`/${lang}/events/${event.id}`}
                 className={typeof event.max_capacity === 'number' && event.participant_count >= event.max_capacity ? 'opacity-50 cursor-not-allowed' : ''}
@@ -162,7 +161,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
               <Card
                 key={course.id}
                 title={`${course.name} (${course.type})`}
-                description={`${course.start_date} - ${course.end_date}\n${dict.homepage.price}: ${course.price} UAH\n${dict.homepage.spots}: ${course.participant_count} / ${course.max_capacity || 'N/A'}${typeof course.max_capacity === 'number' && course.participant_count >= course.max_capacity ? ` (${dict.homepage.full})` : ''}`}
+                description={`${course.start_date} - ${course.end_date}\n${dict.courses_page.price}: ${course.price} UAH\n${dict.homepage.spots}: ${course.participant_count} / ${course.max_capacity || 'N/A'}${typeof course.max_capacity === 'number' && course.participant_count >= course.max_capacity ? ` (${dict.homepage.full})` : ''}`}
                 buttonText={dict.homepage.sign_up}
                 buttonLink={`/${lang}/courses?courseId=${course.id}`}
                 className={typeof course.max_capacity === 'number' && course.participant_count >= course.max_capacity ? 'opacity-50 cursor-not-allowed' : ''}

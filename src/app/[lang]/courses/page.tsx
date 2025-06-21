@@ -1,9 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
-import RegistrationForm from '@/components/RegistrationForm'; // Import the form for sign-up
 import { supabaseServer } from '@/lib/supabaseServerClient';
 import type { Course } from '@/lib/supabaseClient';
-import { getDictionary, Dictionary } from '@/lib/getDictionary'; // Import dictionary utility
+import { getDictionary } from '@/lib/getDictionary'; // Import dictionary utility
 
 export const revalidate = 60; // Revalidate page every 60 seconds
 
@@ -16,7 +15,7 @@ interface CourseWithCount extends Course {
 async function getCoursesPageData(lang: 'en' | 'ua'): Promise<{ // Specify exact types for lang
   coursesWithCounts: CourseWithCount[];
   error: string | null;
-  dict: Dictionary; // Pass dictionary
+  dict: Awaited<ReturnType<typeof getDictionary>>; // Pass dictionary
 }> {
   try {
     const dict = await getDictionary(lang); // Load dictionary

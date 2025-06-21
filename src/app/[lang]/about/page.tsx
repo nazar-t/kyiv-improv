@@ -1,6 +1,5 @@
 import React from 'react';
-import Image from 'next/image'; // For founder/actor photos if available
-import { getDictionary, Dictionary } from '@/lib/getDictionary'; // Import dictionary utility
+import { getDictionary } from '@/lib/getDictionary'; // Import dictionary utility
 
 export const metadata = {
   title: 'About Us - Improv & Debate Club',

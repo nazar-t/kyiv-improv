@@ -1,5 +1,6 @@
 import React from 'react';
-import Link from 'next/link'; // Assuming Link is used for buttons that navigate
+import Link from 'next/link';
+import Image from 'next/image';
 
 interface CardProps {
   imageUrl?: string;
@@ -7,17 +8,18 @@ interface CardProps {
   description: string;
   buttonText: string;
   buttonLink: string;
-  // Optional: Add a prop for a custom class name if needed for specific instances
   className?: string;
 }
 
 const Card: React.FC<CardProps> = ({ imageUrl, title, description, buttonText, buttonLink, className }) => {
   return (
     <div className={`bg-primary-black border border-accent-yellow p-6 rounded-lg shadow-lg flex flex-col ${className || ''}`}>
-      {imageUrl && ( // Conditionally render image if provided
-        <img
+      {imageUrl && (
+        <Image
           src={imageUrl}
           alt={title}
+          width={500} // You might need to adjust these based on your design
+          height={300} // You might need to adjust these based on your design
           className="w-full h-48 object-cover rounded-t-lg mb-4"
         />
       )}

@@ -1,9 +1,10 @@
 'use client'; // Mark as Client Component
 
 import Link from 'next/link';
-import React, { useState } from 'react'; // Import useState for dropdown state
-import { useRouter, usePathname } from 'next/navigation'; // Import useRouter and usePathname
-import Cookies from 'js-cookie'; // Import js-cookie
+import React, { useState } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
+import Cookies from 'js-cookie';
+import Image from 'next/image';
 
 // Define the dictionary type
 interface Dictionary {
@@ -48,7 +49,7 @@ export default function Header({ dict, currentLocale }: HeaderProps) {
       <div className="flex items-center">
         <Link href={`/${currentLocale}/`}> {/* Link to locale-specific homepage */}
           {/* Assuming cat1.png is still used for the logo, not a flag */}
-          <img
+          <Image
             src="/cat1.png" // Path to your logo in the public folder
             alt={dict.header.improv_club}
             width={50} // Adjust size as needed

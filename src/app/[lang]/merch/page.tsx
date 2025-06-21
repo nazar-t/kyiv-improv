@@ -1,5 +1,5 @@
 import React from 'react';
-import { getDictionary, Dictionary } from '@/lib/getDictionary'; // Import dictionary utility
+import { getDictionary } from '@/lib/getDictionary'; // Import dictionary utility
 
 export const metadata = {
   title: 'Merch - Improv & Debate Club',
