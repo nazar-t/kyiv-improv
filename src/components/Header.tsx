@@ -61,7 +61,7 @@ export default function Header({ dict, currentLocale }: HeaderProps) {
       {/* Navigation */}
       <nav className="hidden md:block">
         <ul className="flex space-x-8">
-          <li><Link href={`/${currentLocale}/`} className=" hover:text-yellow-300 transition-colors duration-200">{dict.header.home}</Link></li>
+          <li><Link href={`/${currentLocale}/`} className="hover:text-accent-yellow transition-colors duration-200">{dict.header.home}</Link></li>
           <li><Link href={`/${currentLocale}/courses`} className="hover:text-accent-yellow transition-colors duration-200">{dict.header.courses}</Link></li>
           <li><Link href={`/${currentLocale}/jams-workshops`} className="hover:text-accent-yellow transition-colors duration-200">{dict.header.jams_workshops}</Link></li>
           {/* <li><Link href={`/${currentLocale}/shows`} className="hover:text-accent-yellow transition-colors duration-200">{dict.header.shows}</Link></li> */}
