@@ -75,8 +75,16 @@ async function getJamsWorkshopsData(lang: 'en' | 'ua'): Promise<{ // Specify exa
   }
 }
 
-export default async function JamsWorkshopsPage({ params: { lang } }: { params: { lang: 'en' | 'ua' } }) {
-  const { jamsWorkshopsWithCounts, error, dict } = await getJamsWorkshopsData(lang);
+interface PageProps {
+  params: Promise<{
+    lang: string;
+  }>;
+}
+
+export default async function JamsWorkshopsPage({ params }: PageProps) {
+  const { lang } = await params;
+  const typedLang = lang as 'en' | 'ua';
+  const { jamsWorkshopsWithCounts, error, dict } = await getJamsWorkshopsData(typedLang);
 
   return (
     <div className="container mx-auto px-4 py-8">

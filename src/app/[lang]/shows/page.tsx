@@ -13,7 +13,7 @@ interface EventWithCount extends Event {
 async function getShowsData(lang: 'en' | 'ua'): Promise<{ // Specify exact types for lang
   showsWithCounts: EventWithCount[];
   error: string | null;
-  dict: Dictionary; // Pass dictionary
+  dict: Dictionary; // Pass dictionary with explicit type
 }> {
   try {
     const dict = await getDictionary(lang); // Load dictionary
@@ -75,8 +75,16 @@ async function getShowsData(lang: 'en' | 'ua'): Promise<{ // Specify exact types
   }
 }
 
-export default async function ShowsPage({ params: { lang } }: { params: { lang: 'en' | 'ua' } }) {
-  const { showsWithCounts, error, dict } = await getShowsData(lang);
+interface PageProps {
+  params: Promise<{
+    lang: string;
+  }>;
+}
+
+export default async function ShowsPage({ params }: PageProps) {
+  const { lang } = await params;
+  const typedLang = lang as 'en' | 'ua';
+  const { showsWithCounts, error, dict } = await getShowsData(typedLang);
 
   return (
     <div className="container mx-auto px-4 py-8">

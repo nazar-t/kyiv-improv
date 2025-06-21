@@ -109,8 +109,14 @@ async function getHomepageData(): Promise<{
   }
 }
 
-export default async function HomePage({ params }: { params: { lang: string } }) {
-  const { lang } = params;
+interface PageProps {
+  params: Promise<{
+    lang: string;
+  }>;
+}
+
+export default async function HomePage({ params }: PageProps) {
+  const { lang } = await params;
   const dict = await getDictionary(lang); // Fetch dictionary for the page
   const { eventsWithCounts, coursesWithCounts, error } = await getHomepageData();
 

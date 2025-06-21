@@ -1,6 +1,6 @@
 import 'server-only'; // Ensures this module is only imported on the server
 
-interface Dictionary {
+export interface Dictionary {
   header: {
     courses: string;
     jams_workshops: string;

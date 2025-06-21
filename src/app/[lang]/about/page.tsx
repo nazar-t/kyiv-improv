@@ -6,7 +6,14 @@ export const metadata = {
   description: 'Learn more about the founders and actors of Improv & Debate Club.',
 };
 
-export default async function AboutPage({ params: { lang } }: { params: { lang: 'en' | 'ua' } }) {
+interface PageProps {
+  params: Promise<{
+    lang: string;
+  }>;
+}
+
+export default async function AboutPage({ params }: PageProps) {
+  const { lang } = await params;
   const dict = await getDictionary(lang);
 
   return (

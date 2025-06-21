@@ -4,7 +4,7 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Cookies from 'js-cookie';
-import Image from 'next/image';
+//import Image from 'next/image';
 
 // Define the dictionary type
 interface Dictionary {
@@ -48,14 +48,10 @@ export default function Header({ dict, currentLocale }: HeaderProps) {
       {/* Logo */}
       <div className="flex items-center">
         <Link href={`/${currentLocale}/`}> {/* Link to locale-specific homepage */}
-          {/* Assuming cat1.png is still used for the logo, not a flag */}
-          <Image
-            src="/cat1.png" // Path to your logo in the public folder
-            alt={dict.header.improv_club}
-            width={50} // Adjust size as needed
-            height={50} // Adjust size as needed
-            className="cursor-pointer"
-          />
+          {/* Placeholder for logo since cat1.png does not exist */}
+          <div className="w-[50px] h-[50px] bg-gray-700 rounded-full flex items-center justify-center cursor-pointer">
+            <span className="text-text-light text-sm">Logo</span>
+          </div>
         </Link>
         {/* Optional: Add school name next to logo */}
         <span className="ml-3 text-xl font-bold text-accent-yellow hidden sm:block">{dict.header.improv_club}</span>
