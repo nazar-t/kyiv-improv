@@ -6,7 +6,8 @@ export const metadata = {
   description: 'Frequently Asked Questions about Improv & Debate Club.',
 };
 
-export default async function FAQPage({ params: { lang } }: { params: { lang: 'en' | 'ua' } }) {
+export default async function FAQPage({ params }: { params: { lang: 'en' | 'ua' } }) {
+  const { lang } = params;
   const dict = await getDictionary(lang);
 
   return (

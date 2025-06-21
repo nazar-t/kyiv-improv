@@ -6,7 +6,8 @@ export const metadata = {
   description: 'Official merchandise for Improv & Debate Club.',
 };
 
-export default async function MerchPage({ params: { lang } }: { params: { lang: 'en' | 'ua' } }) {
+export default async function MerchPage({ params }: { params: { lang: 'en' | 'ua' } }) {
+  const { lang } = params;
   const dict = await getDictionary(lang);
 
   return (
