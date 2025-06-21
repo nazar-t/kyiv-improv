@@ -76,7 +76,8 @@ async function getCoursesPageData(lang: 'en' | 'ua'): Promise<{ // Specify exact
   }
 }
 
-export default async function CoursesPage({ params: { lang } }: { params: { lang: 'en' | 'ua' } }) {
+export default async function CoursesPage({ params }: { params: Promise<{ lang: 'en' | 'ua' }> }) {
+  const { lang } = await params;
   const { coursesWithCounts, error, dict } = await getCoursesPageData(lang);
 
   // Hardcoded course details (as per plan)
