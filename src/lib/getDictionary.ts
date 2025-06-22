@@ -2,6 +2,7 @@ import 'server-only'; // Ensures this module is only imported on the server
 
 export interface Dictionary {
   header: {
+    home: string;
     courses: string;
     jams_workshops: string;
     faq: string;

@@ -19,20 +19,13 @@ export async function generateStaticParams() {
   return [{ lang: 'en' }, { lang: 'ua' }];
 }
 
-export default async function RootLayout({
-  children,
-  params, // params is a Promise
-}: {
-  children: React.ReactNode;
-  params: Promise<{ lang: string }>; // Define params type as Promise
-}) {
-  const { lang } = await params; // Await params here
-  console.log('RootLayout - received lang:', lang);
+export default async function RootLayout({children, params,}: {children: React.ReactNode; params: Promise<{ lang: string }>;}) {
+  const { lang } = await params;
   const dict = await getDictionary(lang);
 
   return (
     <html lang={lang} className={`${roboto_mono.variable}`}><body className="bg-primary-black text-text-light font-mono antialiased flex flex-col min-h-screen">
-        <Header dict={dict} currentLocale={lang} /> {/* Pass dict and currentLocale as props */}
+      <Header dict={dict} currentLocale={lang} />
         <main className="flex-grow">
           {children}
         </main>

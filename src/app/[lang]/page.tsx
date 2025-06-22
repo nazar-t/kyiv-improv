@@ -122,13 +122,9 @@ export default async function HomePage({ params }: PageProps) {
 
   return (
     <div className="container mx-auto">
-      
-      <h1 className="text-4xl font-bold text-accent-yellow text-center mb-12">{dict.homepage.welcome_title}</h1>
-
       {/* Highlights Carousel Section */}
       <SectionWrapper>
         <div className="py-8"> {/* Added padding to content */}
-          <h2 className="text-3xl font-bold text-text-light mb-6 text-center">{dict.homepage.highlights_carousel_title}</h2>
           <div className="bg-gray-700 h-64 flex items-center justify-center text-text-light text-xl rounded-lg">
             [Placeholder for Carousel Component]
           </div>
@@ -138,9 +134,9 @@ export default async function HomePage({ params }: PageProps) {
       {/* Event Calendar Section (from Events table) */}
       <SectionWrapper>
         <div className="py-8"> {/* Added padding to content */}
-          <h2 className="text-3xl font-bold text-text-light mb-6 text-center">{dict.homepage.upcoming_spectator_events}</h2>
+          <h2 className="text-3xl font-bold text-text-light mb-6 text-center">{dict.homepage.upcoming_events}</h2>
           {error && <p className="text-red-500 text-center">{error}</p>}
-          {eventsWithCounts.length === 0 && !error && <p className="text-text-light text-center">{dict.homepage.no_upcoming_spectator_events}</p>}
+          {eventsWithCounts.length === 0 && !error && <p className="text-text-light text-center">{dict.homepage.no_upcoming_events}</p>}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {eventsWithCounts.map(event => (
               <Card
