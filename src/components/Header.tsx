@@ -13,7 +13,7 @@ interface Dictionary {
     jams_workshops: string;
     faq: string;
     about: string;
-    home: string
+    home: string;
     shows: string;
     merch: string;
     improv_club: string;
