@@ -12,11 +12,6 @@ interface EventWithCount extends Event {
   participant_count: number;
 }
 
-// Interface for combined course data with participant count (for student offerings)
-interface CourseWithCount extends Course {
-  participant_count: number;
-}
-
 async function getHomepageData(): Promise<{
   eventsWithCounts: EventWithCount[];
   error: string | null;
