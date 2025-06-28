@@ -2,8 +2,8 @@ import React from 'react';
 import Card from '@/components/Card';
 import SectionWrapper from '@/components/SectionWrapper';
 import { supabaseServer } from '@/lib/supabaseServerClient';
-import type { Event, Course } from '@/lib/supabaseClient'; // Import both Event and Course types
-import { getDictionary } from '@/lib/getDictionary'; // Import getDictionary
+import type { Event } from '@/lib/supabaseClient'; 
+import { getDictionary } from '@/lib/getDictionary';
 
 export const revalidate = 60; // Revalidate page every 60 seconds
 
