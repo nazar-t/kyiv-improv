@@ -4,7 +4,7 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Cookies from 'js-cookie';
-//import Image from 'next/image';
+import Image from 'next/image';
 
 // Define the dictionary type
 interface Dictionary {
@@ -27,8 +27,8 @@ interface HeaderProps {
 
 export default function Header({ dict, currentLocale }: HeaderProps) {
   const router = useRouter();
-  const pathname = usePathname(); // Initialize pathname
-  const [dropdownOpen, setDropdownOpen] = useState(false); // State for dropdown visibility
+  const pathname = usePathname();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const switchLocale = (locale: string) => {
     Cookies.set('NEXT_LOCALE', locale, { expires: 365 }); // Set the cookie for 1 year
@@ -48,13 +48,7 @@ export default function Header({ dict, currentLocale }: HeaderProps) {
     <header className="w-full bg-primary-black text-text-light py-2 px-8 flex justify-between items-center border-b border-accent-yellow">
       {/* Logo */}
       <div className="flex items-center">
-        <Link href={`/${currentLocale}/`}> {/* Link to locale-specific homepage */}
-          {/* Placeholder for logo since cat1.png does not exist */}
-          <div className="w-[50px] h-[50px] bg-gray-700 rounded-full flex items-center justify-center cursor-pointer">
-            <span className="text-text-light text-sm">Logo</span>
-          </div>
-        </Link>
-        {/* Optional: Add school name next to logo */}
+        <Image src="/logo.png" alt="Logo" width={75} height={75} /> 
         <span className="ml-3 text-xl font-bold text-accent-yellow hidden sm:block">{dict.header.improv_club}</span>
       </div>
 

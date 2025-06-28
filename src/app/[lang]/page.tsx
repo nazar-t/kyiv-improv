@@ -156,21 +156,8 @@ export default async function HomePage({ params }: PageProps) {
       <SectionWrapper>
         <div className="py-8"> {/* Added padding to content */}
           <h2 className="text-3xl font-bold text-text-light mb-6 text-center">{dict.homepage.upcoming_student_offerings}</h2>
-          {error && <p className="text-red-500 text-center">{error}</p>}
-          {coursesWithCounts.length === 0 && !error && <p className="text-text-light text-center">{dict.homepage.no_upcoming_student_offerings}</p>}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {coursesWithCounts.map(course => (
-              <Card
-                key={course.id}
-                title={`${course.name} (${course.type})`}
-                description={`${course.start_date} - ${course.end_date}\n${dict.courses_page.price}: ${course.price} UAH\n${dict.homepage.spots}: ${course.participant_count} / ${course.max_capacity || 'N/A'}${typeof course.max_capacity === 'number' && course.participant_count >= course.max_capacity ? ` (${dict.homepage.full})` : ''}`}
-                buttonText={dict.homepage.sign_up}
-                buttonLink={`/${lang}/courses?courseId=${course.id}`}
-                className={typeof course.max_capacity === 'number' && course.participant_count >= course.max_capacity ? 'opacity-50 cursor-not-allowed' : ''}
-              />
-            ))}
-            {/* Hardcoded core courses can be added here if still desired, or removed */}
-            <Card
+          <div className='flex justify-center max-w-l'>
+            <Card 
               title={dict.homepage.beginner_improv_title}
               description={dict.homepage.beginner_improv_description}
               buttonText={dict.homepage.learn_more}
