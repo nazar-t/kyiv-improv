@@ -19,7 +19,6 @@ interface CourseWithCount extends Course {
 
 async function getHomepageData(): Promise<{
   eventsWithCounts: EventWithCount[];
-  coursesWithCounts: CourseWithCount[];
   error: string | null;
 }> {
   try {
@@ -61,39 +60,8 @@ async function getHomepageData(): Promise<{
         console.log("Server: No spectator events found.");
     }
 
-
-    // --- Fetch Student Courses (Jams, Workshops, Courses) ---
-    const { data: coursesData, error: coursesError } = await supabaseServer.from('Courses').select('*').gte('start date', todayStr).lte('start date', twoWeeksStr).order('start date', { ascending: true });
-    if (coursesError) throw coursesError;
-
-    const courseIds = coursesData?.map(course => course.id) || [];
-    let coursesWithCounts: CourseWithCount[] = [];
-
-    if (courseIds.length > 0) {
-      const { data: courseCountsData, error: courseCountsError } = await supabaseServer.from('Course Participants').select('course_id, count: student_id(count)').in('course_id', courseIds).in('payment_status', ['pending', 'paid']);
-      if (courseCountsError) throw courseCountsError;
-
-      const courseCountsMap = new Map<number, number>();
-      courseCountsData?.forEach((value: { course_id: number; count: { count: number; }[] | number | null }) => {
-        let count = 0;
-        if (typeof value.count === 'number') {
-            count = value.count;
-        } else if (Array.isArray(value.count) && value.count.length > 0 && typeof value.count[0]?.count === 'number') {
-            count = value.count[0].count;
-        }
-        courseCountsMap.set(value.course_id, count);
-      });
-
-      coursesWithCounts = coursesData.map(course => ({
-        ...course,
-        participant_count: courseCountsMap.get(course.id) || 0,
-      }));
-    } else {
-        console.log("Server: No student courses found.");
-    }
-
     console.log("Server: Fetched homepage data successfully.");
-    return { eventsWithCounts, coursesWithCounts, error: null };
+    return { eventsWithCounts, error: null };
 
   } catch (err: unknown) {
     let errorMessage = 'An unknown error occurred';
@@ -105,7 +73,7 @@ async function getHomepageData(): Promise<{
       console.error("Server: Detailed error object (non-Error instance):", err);
     }
     console.error("Server: Error fetching homepage data:", errorMessage);
-    return { eventsWithCounts: [], coursesWithCounts: [], error: `Failed to load data: ${errorMessage}` };
+    return { eventsWithCounts: [], error: `Failed to load data: ${errorMessage}` };
   }
 }
 
@@ -118,7 +86,7 @@ interface PageProps {
 export default async function HomePage({ params }: PageProps) {
   const { lang } = await params;
   const dict = await getDictionary(lang); // Fetch dictionary for the page
-  const { eventsWithCounts, coursesWithCounts, error } = await getHomepageData();
+  const { eventsWithCounts, error } = await getHomepageData();
 
   return (
     <div className="container mx-auto">
