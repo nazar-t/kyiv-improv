@@ -1,6 +1,7 @@
 import 'server-only'; // Ensures this module is only imported on the server
 
 export interface Dictionary {
+  lang:string;
   header: {
     home: string;
     courses: string;
@@ -124,7 +125,7 @@ export interface Dictionary {
     first_name: string;
     last_name: string;
     email: string;
-    instagram: string;
+    number: string;
     select_event: string;
     loading_events: string;
     failed_to_load_events: string;

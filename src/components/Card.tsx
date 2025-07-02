@@ -7,11 +7,12 @@ interface CardProps {
   title: string;
   description: string;
   buttonText: string;
-  buttonLink: string;
+  buttonLink?: string;
+  buttonAction?: () => void; 
   className?: string;
 }
 
-const Card: React.FC<CardProps> = ({ imageUrl, title, description, buttonText, buttonLink, className }) => {
+const Card: React.FC<CardProps> = ({ imageUrl, title, description, buttonText, buttonLink, buttonAction, className }) => {
   return (
     <div className={`bg-primary-black border border-accent-yellow p-6 rounded-lg shadow-lg flex flex-col ${className || ''}`}>
       {imageUrl && (
@@ -29,9 +30,17 @@ const Card: React.FC<CardProps> = ({ imageUrl, title, description, buttonText, b
         <p className="text-text-light mb-4">{description}</p>
       </div>
 
-      <Link href={buttonLink} className="inline-block bg-accent-yellow text-primary-black font-bold py-2 px-4 rounded hover:bg-yellow-600 transition-colors duration-200 mt-auto text-center">
-        {buttonText}
-      </Link>
+      {buttonAction && (
+        <button onClick={buttonAction}>
+          {buttonText}
+        </button>
+      )}
+    
+      {buttonLink && !buttonAction && (
+        <Link href={buttonLink}>
+          {buttonText}
+        </Link>
+      )}
     </div>
   );
 };

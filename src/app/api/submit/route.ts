@@ -7,7 +7,7 @@ interface SubmitRequestBody {
     firstName: string;
     lastName: string;
     email: string;
-    instagram?: string; // Optional
+    number?: string; // Optional
     selectedEventId: number;
 }
 
@@ -23,7 +23,7 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: 'Invalid request body' }, { status: 400 });
     }
 
-    const { firstName, lastName, email, instagram, selectedEventId } = requestBody;
+    const { firstName, lastName, email, number, selectedEventId } = requestBody;
 
     // Basic validation
     if (!firstName || !lastName || !email || !selectedEventId) {
@@ -52,26 +52,15 @@ export async function POST(request: Request) {
         if (existingStudent) {
             console.log(`Found existing student with ID: ${existingStudent.id}`);
             studentId = existingStudent.id;
-            // Optionally, update name/instagram if they changed? For now, just use existing ID.
-            // const { error: updateError } = await supabaseServer // Use server client if uncommented
-            //     .from('Students')
-            //     .update({ first_name: firstName, last_name: lastName, instagram: cleanedInstagram }) // Use cleaned value if uncommented
-            //     .eq('id', studentId);
-            // if (updateError) console.warn("Could not update existing student info:", updateError);
-
         } else {
             console.log(`Creating new student for email: ${email}`);
-            // Clean instagram input before inserting
-            const cleanedInstagram = instagram ? instagram.replace(/^[#@]/, '').trim() : null;
-            console.log(`Creating new student for email: ${email} with cleaned instagram: ${cleanedInstagram}`);
-            // Create new student if not found using server client
             const { data: newStudent, error: createError } = await supabaseServer
                 .from('Students')
                 .insert({
                     first_name: firstName,
                     last_name: lastName,
                     email: email,
-                    instagram: cleanedInstagram // Use cleaned value
+                    number: number
                 })
                 .select('id')
                 .single(); // Expect exactly one row back

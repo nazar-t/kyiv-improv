@@ -21,7 +21,7 @@ export interface Student {
   first_name: string;
   last_name: string;
   email: string;
-  instagram?: string | null; // Optional field
+  number?: string; 
   regular?: boolean | null;
   created_at?: string;
 }
@@ -37,6 +37,10 @@ export interface Event { // This is for spectator events
   created_at?: string;
 }
 
+export interface EventWithCount extends Event {
+  participant_count: number;
+}
+
 // New interface for Courses table (student offerings: jams, workshops, courses)
 export interface Course {
   id: number;
@@ -47,6 +51,16 @@ export interface Course {
   type: string; // e.g., 'jam', 'workshop', 'course'
   max_capacity?: number | null; // Optional field
   created_at?: string; // Assuming you'll add this for tracking
+}
+
+export interface RegistrableItem {
+  id: number;
+  name: string;
+  price: number;
+  max_capacity?: number | null;
+  participant_count: number;
+  itemType: 'event' | 'course'; 
+  date: string | null | undefined; 
 }
 
 export interface EventParticipant {

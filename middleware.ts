@@ -1,17 +1,31 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { match } from '@formatjs/intl-localematcher';
+import Negotiator from 'negotiator';
 
 const locales = ['en', 'ua'];
-const defaultLocale = 'en';
+const defaultLocale = 'ua';
   
-function getLocale(request: NextRequest) {
+function getLocale(request: NextRequest): string {
+  // Get the user's browser language preferences from the headers.
+  const negotiatorHeaders: Record<string, string> = {};
+  request.headers.forEach((value, key) => (negotiatorHeaders[key] = value));
+  
+  const languages = new Negotiator({ headers: negotiatorHeaders }).languages();
+
+  // Check if a locale preference is stored in the 'NEXT_LOCALE' cookie.
   const localeCookie = request.cookies.get('NEXT_LOCALE')?.value;
   if (localeCookie && locales.includes(localeCookie)) {
-    return localeCookie;
+    return localeCookie; // A saved cookie always wins.
   }
-  return defaultLocale;
-}
 
+  // Find the best match between the browser's languages and your supported locales. Returns the best-supported locale or the default.
+  try {
+    return match(languages, locales, defaultLocale);
+  } catch (e) {
+    return defaultLocale;
+  }
+}
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
