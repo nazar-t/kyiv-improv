@@ -1,10 +1,9 @@
 'use client'; // Mark as Client Component
-
-import Link from 'next/link';
 import React, { useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Cookies from 'js-cookie';
 import Image from 'next/image';
+import Button from './Button';
 
 // Define the dictionary type
 interface Dictionary {
@@ -29,7 +28,14 @@ export default function Header({ dict, currentLocale }: HeaderProps) {
   const router = useRouter();
   const pathname = usePathname();
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
+  const navLinks = [
+    { href: `/${currentLocale}/`, text: dict.header.home },
+    { href: `/${currentLocale}/courses`, text: dict.header.courses },
+    { href: `/${currentLocale}/jams-workshops`, text: dict.header.jams_workshops },
+    { href: `/${currentLocale}/faq`, text: dict.header.faq },
+    { href: `/${currentLocale}/about`, text: dict.header.about },
+  ];
+  
   const switchLocale = (locale: string) => {
     Cookies.set('NEXT_LOCALE', locale, { expires: 365 }); // Set the cookie for 1 year
     const newPath = `/${locale}${pathname.startsWith(`/${currentLocale}`) ? pathname.substring(`/${currentLocale}`.length) : pathname}`;
@@ -54,14 +60,10 @@ export default function Header({ dict, currentLocale }: HeaderProps) {
 
       {/* Navigation */}
       <nav className="hidden md:block">
-        <ul className="flex space-x-8">
-          <li><Link href={`/${currentLocale}/`} className="hover:text-accent-yellow transition-colors duration-200">{dict.header.home}</Link></li>
-          <li><Link href={`/${currentLocale}/courses`} className="hover:text-accent-yellow transition-colors duration-200">{dict.header.courses}</Link></li>
-          <li><Link href={`/${currentLocale}/jams-workshops`} className="hover:text-accent-yellow transition-colors duration-200">{dict.header.jams_workshops}</Link></li>
-          {/* <li><Link href={`/${currentLocale}/shows`} className="hover:text-accent-yellow transition-colors duration-200">{dict.header.shows}</Link></li> */}
-          <li><Link href={`/${currentLocale}/faq`} className="hover:text-accent-yellow transition-colors duration-200">{dict.header.faq}</Link></li>
-          <li><Link href={`/${currentLocale}/about`} className="hover:text-accent-yellow transition-colors duration-200">{dict.header.about}</Link></li>
-          {/* <li><Link href={`/${currentLocale}/merch`} className="hover:text-accent-yellow transition-colors duration-200">{dict.header.merch}</Link></li> */}
+        <ul className="flex">   
+          {navLinks.map((link) => (
+            <li className='block transition-transform duration-200 hover:scale-110'><Button href={link.href} className={"border-0"} >{link.text}</Button></li>
+          ))}
         </ul>
       </nav>
 
