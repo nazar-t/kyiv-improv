@@ -1,5 +1,4 @@
 import React from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
 import Button from './Button';
 
@@ -15,7 +14,7 @@ interface CardProps {
 
 const Card: React.FC<CardProps> = ({ imageUrl, title, description, buttonText, buttonLink, buttonAction, className }) => {
   return (
-    <div className={`bg-primary-black border border-accent-yellow p-6 gap-5 items-start rounded-lg shadow-lg flex-none w-full max-w-md`}>
+<div className={`bg-primary-black border border-accent-yellow p-6 gap-5 items-start rounded-lg shadow-lg flex-none w-full max-w-md ${className || ''}`}>
       {imageUrl && (
         <div className="relative flex-none w-30 aspect-square">
           <Image

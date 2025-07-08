@@ -62,7 +62,7 @@ export default function Header({ dict, currentLocale }: HeaderProps) {
       <nav className="hidden md:block">
         <ul className="flex">   
           {navLinks.map((link) => (
-            <li className='block transition-transform duration-200 hover:scale-110'><Button href={link.href} className={"border-0"} >{link.text}</Button></li>
+            <li key={link.href} className='block transition-transform duration-200 hover:scale-110'><Button href={link.href} className={"border-0"} >{link.text}</Button></li>
           ))}
         </ul>
       </nav>
