@@ -32,6 +32,7 @@ export interface Dictionary {
     view_details: string;
     contact_us_title: string;
     location_info_title: string;
+    location: string;
     address: string;
     phone: string;
     email: string;

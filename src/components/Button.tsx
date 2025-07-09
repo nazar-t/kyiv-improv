@@ -10,7 +10,7 @@ interface ButtonProps{
     className?: string
 }
 export default function Button({onClick, children, type='button',href, className} : ButtonProps){
-    const buttonStyles = `border-1 border-accent-yellow rounded-xl p-2 hover:bg-yellow-600 hover:scale-110 cursor-pointer transition-transform 
+    const buttonStyles = `border-1 border-white rounded-xl p-2 hover:border-accent-yellow hover:[filter:drop-shadow(1px_3px_1px_rgba(215,215,0,0.5))] hover:scale-110 cursor-pointer transition-transform 
     duration-200 ${className || ''}`;
     
     //to override default style     

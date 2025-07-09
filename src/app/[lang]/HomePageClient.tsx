@@ -58,27 +58,30 @@ export default function HomePageClient({ items, dict }: HomePageClientProps) {
 
       {/* 2. EVENT CALENDAR SECTION (shows, jams, workshops) */}
       <SectionWrapper>
-        <div className="container mx-auto py-8">
+        <div className="container mx-auto py-8 h-full flex flex-col">
           <h2 className="text-3xl font-bold text-text-light mb-6 text-center">{dict.homepage.upcoming_events}</h2>
-          {items.length === 0 && <p className="text-text-light text-center">{dict.homepage.no_upcoming_events}</p>}
-          <div className="mx-6 flex overflow-x-auto gap-10">
-            {items.map(item => (
-              <Card
-                key={item.id}
-                title={item.name}
-                imageUrl={"/logo.png"}
-                description={`${item.date} - Price: ${item.price} UAH`}
-                buttonText={dict.homepage.sign_up}
-                buttonAction={() => setSelectedItem(item)}
-              />
-            ))}
+          <div className='flex-grow flex items-center'>
+            {items.length === 0 && <p className="text-text-light text-center">{dict.homepage.no_upcoming_events}</p>}
+            <div className="w-full flex overflow-x-auto gap-10 py-4 px-4">
+              {items.map(item => (
+                <Card
+                  key={item.id}
+                  className="flex-shrink-0 w-80 sm:w-96 h-[70vh]"
+                  title={item.name}
+                  imageUrl={"/logo.png"}
+                  description={`${item.date} - Price: ${item.price} UAH`}
+                  buttonText={dict.homepage.sign_up}
+                  buttonAction={() => setSelectedItem(item)}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </SectionWrapper>
 
       {/* 3. COURSES SECTION */}
       <SectionWrapper>
-        <div className="container mx-auto py-8">
+        <div className="container mx-auto py-8 h-full flex flex-col">
           <h2 className="text-3xl font-bold text-text-light mb-6 text-center">{dict.homepage.our_core_courses}</h2>
           <div className='grid grid-cols-2 items-center max-w-l'>
             <Card 
@@ -99,11 +102,44 @@ export default function HomePageClient({ items, dict }: HomePageClientProps) {
 
       {/* 4. FAQ SECTION */}
       <SectionWrapper>
-        <div className="container mx-auto py-8">
-          <h2 className="text-3xl font-bold text-text-light mb-6 text-center">{dict.faq_page.title}</h2>
-          <div className="bg-gray-700 h-48 flex items-center justify-center text-text-light text-xl rounded-lg">
-            [Placeholder for FAQ Content]
-          </div>
+        <div className="container mx-auto px-8 py-8">
+          <section className="mb-8">
+            <h2 className="text-2xl font-bold text-text-light mb-4">{dict.faq_page.general_questions}</h2>
+            <div className="space-y-4">
+              <div className="bg-primary-black border border-accent-yellow p-4 rounded-lg shadow-lg">
+                <h3 className="text-xl font-bold text-accent-yellow mb-2">{dict.faq_page.what_is_improv_q}</h3>
+                <p className="text-text-light">{dict.faq_page.what_is_improv_a}</p>
+              </div>
+              <div className="bg-primary-black border border-accent-yellow p-4 rounded-lg shadow-lg">
+                <h3 className="text-xl font-bold text-accent-yellow mb-2">{dict.faq_page.do_i_need_experience_q}</h3>
+                <p className="text-text-light">{dict.faq_page.do_i_need_experience_a}</p>
+              </div>
+            </div>
+          </section>
+
+          <section className="mb-8">
+            <h2 className="text-2xl font-bold text-text-light mb-4">{dict.faq_page.registration_payment}</h2>
+            <div className="space-y-4">
+              <div className="bg-primary-black border border-accent-yellow p-4 rounded-lg shadow-lg">
+                <h3 className="text-xl font-bold text-accent-yellow mb-2">{dict.faq_page.how_to_sign_up_q}</h3>
+                <p className="text-text-light">{dict.faq_page.how_to_sign_up_a}</p>
+              </div>
+              <div className="bg-primary-black border border-accent-yellow p-4 rounded-lg shadow-lg">
+                <h3 className="text-xl font-bold text-accent-yellow mb-2">{dict.faq_page.payment_methods_q}</h3>
+                <p className="text-text-light">{dict.faq_page.payment_methods_a}</p>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-bold text-text-light mb-4">{dict.faq_page.online_in_person}</h2>
+            <div className="space-y-4">
+              <div className="bg-primary-black border border-accent-yellow p-4 rounded-lg shadow-lg">
+                <h3 className="text-xl font-bold text-accent-yellow mb-2">{dict.faq_page.online_in_person_q}</h3>
+                <p className="text-text-light">{dict.faq_page.online_in_person_a}</p>
+              </div>
+            </div>
+          </section>
         </div>
       </SectionWrapper>
 
@@ -114,9 +150,9 @@ export default function HomePageClient({ items, dict }: HomePageClientProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-gray-700 p-6 rounded-lg text-text-light">
               <h3 className="text-xl font-bold mb-2">{dict.homepage.location_info_title}</h3>
-              <p>{dict.homepage.address}: [Your Address Here]</p>
-              <p>{dict.homepage.phone}: [Your Phone Here]</p>
-              <p>{dict.homepage.email}: [Your Email Here]</p>
+              <p>{dict.homepage.location}: {dict.homepage.address}</p>
+              <p>{dict.homepage.phone}: +380662273790</p>
+              <p>{dict.homepage.email}: info@coolcats.com.ua</p>
             </div>
             <div className="bg-gray-700 p-6 rounded-lg text-text-light">
               <h3 className="text-xl font-bold mb-2">{dict.homepage.newsletter_signup_title}</h3>
