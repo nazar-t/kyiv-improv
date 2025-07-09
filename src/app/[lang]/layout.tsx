@@ -11,8 +11,8 @@ const roboto_mono = Roboto_Mono({
 });
 
 export const metadata = {
-  title: 'Improv & Debate Club',
-  description: 'Official website for Improv & Debate Club',
+  title: 'Kyiv Improv Theater',
+  description: 'Improv theater & school in Kyiv',
 };
 
 // Add generateStaticParams to define supported locales for static generation

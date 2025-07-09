@@ -6,12 +6,16 @@ import RegistrationModal from '@/components/RegistrationModal';
 import type { RegistrableItem } from '@/lib/supabaseClient';
 import { Dictionary } from '@/lib/getDictionary';
 import Button from '@/components/Button';
+import Carousel from '@/components/Carousel';
+
 
 // Define the props that this client component expects
 interface HomePageClientProps {
   items: RegistrableItem[];
   dict: Dictionary; 
 }
+
+
 
 export default function HomePageClient({ items, dict }: HomePageClientProps) {
   const [selectedItem, setSelectedItem] = useState<RegistrableItem | null>(null);
@@ -24,16 +28,32 @@ export default function HomePageClient({ items, dict }: HomePageClientProps) {
     // You could add logic here to show a "Thank you" message.
     setNewsletterEmail(''); // Clear the input field after submission
   };
+    const carouselSlides = [
+    {
+      src: 'https://placehold.co/1600x900/1a1a1a/FFD700?text=Upcoming+Show',
+      alt: 'Upcoming show banner',
+      title: 'The Grand Improvisation',
+      description: 'Join us for a night of spontaneous comedy and theater. This Friday at 8 PM.',
+    },
+    {
+      src: 'https://placehold.co/1600x900/1a1a1a/FFFFFF?text=Beginner+Course',
+      alt: 'Beginner improv course',
+      title: 'Beginner Improv Course',
+      description: 'New 6-week course starting next month. No experience necessary!',
+    },
+    {
+      src: 'https://placehold.co/1600x900/FFD700/1a1a1a?text=Improv+Jam',
+      alt: 'Improv jam session',
+      title: 'Weekly Improv Jam',
+      description: 'Drop in and play! Every Wednesday. All levels welcome.',
+    },
+  ];
 
     return (
     <div className="flex flex-col gap-y-8">
       {/* 1. HIGHLIGHTS CAROUSEL SECTION */}
       <SectionWrapper>
-        <div className="container mx-auto py-8">
-          <div className="bg-gray-700 h-64 flex items-center justify-center text-text-light text-xl rounded-lg">
-            [Placeholder for Carousel Component]
-          </div>
-        </div>
+        <Carousel slides={carouselSlides} options={{ loop: true }} />
       </SectionWrapper>
 
       {/* 2. EVENT CALENDAR SECTION (shows, jams, workshops) */}

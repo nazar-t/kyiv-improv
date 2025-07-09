@@ -54,13 +54,14 @@ export default function Header({ dict, currentLocale }: HeaderProps) {
     <header className="w-full bg-primary-black text-text-light py-2 px-8 flex justify-between items-center border-b border-accent-yellow">
       {/* Logo */}
       <div className="flex items-center">
-        <Image src="/logo.png" alt="Logo" width={75} height={75} /> 
+        <div className="relative h-12 w-12 md:h-16 md:w-16">
+          <Image src="/logo.png" alt="Logo" fill sizes="(max-width: 767px) 48px, 64px" style={{ objectFit: 'contain' }}/>
+        </div>
         <span className="ml-3 text-xl font-bold text-accent-yellow hidden sm:block">{dict.header.improv_club}</span>
       </div>
-
       {/* Navigation */}
       <nav className="hidden md:block">
-        <ul className="flex">   
+        <ul className="flex gap-x-3">   
           {navLinks.map((link) => (
             <li key={link.href} className='block transition-transform duration-200 hover:scale-110'><Button href={link.href} className={"border-0"} >{link.text}</Button></li>
           ))}
