@@ -37,13 +37,13 @@ async function getHomepageData(): Promise<RegistrableItem[]> {
 }
 
 interface PageProps {
-  params: {
+  params: Promise<{
     lang: string;
-  };
+  }>;
 }
 
 export default async function HomePage({ params }: PageProps) {
-  const { lang } = params;
+  const { lang } = await params;
   const [dict, items] = await Promise.all([
     getDictionary(lang),
     getHomepageData()
