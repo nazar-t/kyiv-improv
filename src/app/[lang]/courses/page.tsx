@@ -124,8 +124,6 @@ export default async function CoursesPage({ params }: PageProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-4xl font-bold text-accent-yellow text-center mb-12">{dict.courses_page.title}</h1>
-
-      {/* Core Courses Section (Hardcoded details) */}
       <section className="mb-12">
         <h2 className="text-3xl font-bold text-text-light mb-6 text-center">{dict.courses_page.core_curriculum}</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

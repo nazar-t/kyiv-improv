@@ -26,10 +26,10 @@ export default function HomePageClient({ items, dict }: HomePageClientProps) {
   };
 
     return (
-    <div className="container mx-auto">
+    <div className="flex flex-col gap-y-8">
       {/* 1. HIGHLIGHTS CAROUSEL SECTION */}
       <SectionWrapper>
-        <div className="py-8">
+        <div className="container mx-auto py-8">
           <div className="bg-gray-700 h-64 flex items-center justify-center text-text-light text-xl rounded-lg">
             [Placeholder for Carousel Component]
           </div>
@@ -38,7 +38,7 @@ export default function HomePageClient({ items, dict }: HomePageClientProps) {
 
       {/* 2. EVENT CALENDAR SECTION (shows, jams, workshops) */}
       <SectionWrapper>
-        <div className="py-8">
+        <div className="container mx-auto py-8">
           <h2 className="text-3xl font-bold text-text-light mb-6 text-center">{dict.homepage.upcoming_events}</h2>
           {items.length === 0 && <p className="text-text-light text-center">{dict.homepage.no_upcoming_events}</p>}
           <div className="mx-6 flex overflow-x-auto gap-10">
@@ -58,7 +58,7 @@ export default function HomePageClient({ items, dict }: HomePageClientProps) {
 
       {/* 3. COURSES SECTION */}
       <SectionWrapper>
-        <div className="py-8">
+        <div className="container mx-auto py-8">
           <h2 className="text-3xl font-bold text-text-light mb-6 text-center">{dict.homepage.our_core_courses}</h2>
           <div className='grid grid-cols-2 items-center max-w-l'>
             <Card 
@@ -79,7 +79,7 @@ export default function HomePageClient({ items, dict }: HomePageClientProps) {
 
       {/* 4. FAQ SECTION */}
       <SectionWrapper>
-        <div className="py-8">
+        <div className="container mx-auto py-8">
           <h2 className="text-3xl font-bold text-text-light mb-6 text-center">{dict.faq_page.title}</h2>
           <div className="bg-gray-700 h-48 flex items-center justify-center text-text-light text-xl rounded-lg">
             [Placeholder for FAQ Content]
@@ -89,7 +89,7 @@ export default function HomePageClient({ items, dict }: HomePageClientProps) {
 
       {/* 5. CONTACTS SECTION */}
       <SectionWrapper>
-        <div className="py-8">
+        <div className="container mx-auto py-8">
           <h2 className="text-3xl font-bold text-text-light mb-6 text-center">{dict.homepage.contact_us_title}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-gray-700 p-6 rounded-lg text-text-light">
