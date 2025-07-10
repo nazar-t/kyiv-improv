@@ -12,6 +12,10 @@ export interface Dictionary {
     merch: string;
     improv_club: string;
   };
+  button: {
+    learn_more: string;
+    sign_up: string;
+  }
   homepage: {
     welcome_title: string;
     upcoming_student_offerings: string;
@@ -23,13 +27,10 @@ export interface Dictionary {
     beginner_improv_description: string;
     advanced_improv_title: string;
     advanced_improv_description: string;
-    learn_more: string;
     gallery_title: string;
     photo: string;
     spots: string;
     full: string;
-    sign_up: string;
-    view_details: string;
     contact_us_title: string;
     location_info_title: string;
     location: string;
@@ -72,7 +73,7 @@ export interface Dictionary {
     upcoming_sessions: string;
     no_upcoming_sessions: string;
   };
-  faq_page: {
+  faq: {
     title: string;
     general_questions: string;
     what_is_improv_q: string;

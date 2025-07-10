@@ -174,7 +174,7 @@ export default async function CoursesPage({ params }: PageProps) {
                 aria-disabled={typeof course.max_capacity === 'number' && course.participant_count >= course.max_capacity}
                 tabIndex={typeof course.max_capacity === 'number' && course.participant_count >= course.max_capacity ? -1 : 0}
               >
-                {dict.homepage.sign_up}
+                {dict.button.sign_up}
               </Link>
             </div>
           ))}

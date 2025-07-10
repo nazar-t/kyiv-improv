@@ -7,13 +7,15 @@ interface CardProps {
   imageUrl?: string;
   title: string;
   description: string;
-  buttonText: string;
+  linkText?: string;
+  actionText?: string;
   buttonLink?: string;
-  buttonAction?: (event: React.MouseEvent<HTMLButtonElement>) => void; 
+  onButtonAction?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onInfoClick?: () => void; 
   className?: string;
 }
 
-const Card: React.FC<CardProps> = ({ imageUrl, title, description, buttonText, buttonLink, buttonAction, className }) => {
+const Card: React.FC<CardProps> = ({ imageUrl, title, description, actionText, linkText, buttonLink, onButtonAction, onInfoClick, className }) => {
   return (
 <div className={twMerge(`bg-primary-black border border-accent-yellow p-4 rounded-lg shadow-lg flex flex-col overflow-hidden`, className)}>
       {imageUrl && (
@@ -31,12 +33,15 @@ const Card: React.FC<CardProps> = ({ imageUrl, title, description, buttonText, b
           <h3 className="text-xl font-bold text-accent-yellow mb-2">{title}</h3>
           <p className="text-text-light mb-4">{description}</p>
         </div>
-        <div className='mt-auto'>
-          {buttonAction && (
-            <Button onClick={buttonAction}>{buttonText}</Button>
+        <div className="mt-auto flex justify-center gap-4">
+          {onInfoClick && (
+            <Button onClick={onInfoClick}>{linkText}</Button>
           )}
-          {buttonLink && !buttonAction && (
-            <Button href={buttonLink}>{buttonText}</Button>
+          {onButtonAction && (
+            <Button onClick={onButtonAction}>{actionText}</Button>
+          )}
+          {buttonLink && (
+            <Button href={buttonLink}>{linkText}</Button>
           )}
         </div>
       </div>

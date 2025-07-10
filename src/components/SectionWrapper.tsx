@@ -7,7 +7,7 @@ interface SectionWrapperProps {
 
 const SectionWrapper: React.FC<SectionWrapperProps> = ({ children, className }) => {
   return (
-    <section className={`bg-primary-black min-h-[50vh] md:min-h-screen ${className || ''}`}>
+    <section className={`bg-primary-black min-h-[50vh]  ${className || ''}`}>
       {children}
     </section>
   );

@@ -101,7 +101,6 @@ export default async function ShowsPage({ params }: PageProps) {
               <p className="text-text-light text-sm mb-2">
                 {event.date} {event.time}
               </p>
-              <p className="text-text-light mb-4">{event.details}</p>
               <p className="text-text-light mb-4">Price: {event.price} UAH</p>
               {typeof event.max_capacity === 'number' && (
                 <p className="text-text-light text-sm mb-4">
@@ -113,7 +112,7 @@ export default async function ShowsPage({ params }: PageProps) {
                 aria-disabled={typeof event.max_capacity === 'number' && event.participant_count >= event.max_capacity}
                 tabIndex={typeof event.max_capacity === 'number' && event.participant_count >= event.max_capacity ? -1 : 0}
               >
-                {dict.homepage.view_details}
+                {dict.button.learn_more}
               </Link>
             </div>
           ))}

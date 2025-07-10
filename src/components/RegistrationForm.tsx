@@ -43,7 +43,7 @@ export default function RegistrationForm({ item, onClose, dict }: RegistrationFo
             lastName,
             email,
             number,
-            itemType: item.itemType, // Send the type to the API
+            selectedEventId: item.id, // Send the type to the API
           }),
         });
 
@@ -107,7 +107,7 @@ export default function RegistrationForm({ item, onClose, dict }: RegistrationFo
         />
       </div>
       <div>
-        <label htmlFor="number" className="block text-sm font-medium text-gray-700">Number</label>
+        <label htmlFor="number" className="block text-sm font-medium text-gray-700">Number <span className="text-red-500">*</span></label>
         <input
           type="text"
           id="number"

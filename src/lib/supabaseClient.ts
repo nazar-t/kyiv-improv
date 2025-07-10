@@ -29,7 +29,7 @@ export interface Student {
 export interface Event { // This is for spectator events
   id: number;
   name: string;
-  details?: string | null;
+  details?: string | { [key: string]: string } | null;
   date?: string | null; // Assuming date type maps to string initially
   time?: string | null; // Assuming time type maps to string initially
   price: number; // Assuming numeric maps to number
@@ -59,7 +59,8 @@ export interface RegistrableItem {
   price: number;
   max_capacity?: number | null;
   participant_count: number;
-  itemType: 'event' | 'course'; 
+  itemType: 'event' | 'course';
+details: string;
   date: string | null | undefined; 
 }
 

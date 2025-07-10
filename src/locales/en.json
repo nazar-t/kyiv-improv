@@ -10,7 +10,11 @@
     "merch": "Merch",
     "improv_club": "KIT"
   },
-  "homepage": {
+  "button": {
+    "learn_more" : "Learn more",
+    "sign_up": "Sign Up"
+  },
+ "homepage": {
     "welcome_title": "Welcome to Improv & Debate Club",
     "upcoming_student_offerings": "Upcoming Student Offerings",
     "no_upcoming_student_offerings": "No upcoming student offerings found.",
@@ -26,8 +30,6 @@
     "photo": "Photo",
     "spots": "Spots",
     "full": "(Full)",
-    "sign_up": "Sign Up",
-    "view_details": "View Details",
     "contact_us_title": "Contact Us",
     "location_info_title": "Location & Info",
     "location": "Address",
@@ -70,7 +72,7 @@
     "upcoming_sessions": "Upcoming Sessions",
     "no_upcoming_sessions": "No upcoming jams or workshops found."
   },
-  "faq_page": {
+  "faq": {
     "title": "Frequently Asked Questions",
     "general_questions": "General Questions",
     "what_is_improv_q": "What is improv?",

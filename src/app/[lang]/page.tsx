@@ -2,9 +2,9 @@ import React from 'react';
 import { getDictionary } from '@/lib/getDictionary';
 import { supabaseServer } from '@/lib/supabaseServerClient';
 import type { RegistrableItem } from '@/lib/supabaseClient';
-import HomePageClient from "@/app/[lang]/HomePageClient"
+import HomePageClient from "@/app/[lang]/HomePageClient";
 
-async function getHomepageData(): Promise<RegistrableItem[]> {
+async function getHomepageData(lang: string): Promise<RegistrableItem[]> {
   try {
     const { data: eventsData, error: eventsError } = await supabaseServer
       .from('Events')
@@ -14,14 +14,18 @@ async function getHomepageData(): Promise<RegistrableItem[]> {
 
     if (eventsError) throw eventsError;
     if (!eventsData) return []; 
-    const countPromises = eventsData.map(event =>
-      supabaseServer.rpc('get_participant_count', { p_event_id: event.id })
+    const countPromises = eventsData.map(
+      event => supabaseServer.rpc('get_participant_count', { p_event_id: event.id })
     );
     const countResults = await Promise.all(countPromises);
     const items: RegistrableItem[] = eventsData.map((event, index) => {
       const participantCount = countResults[index].data ?? 0;
+      const translatedDetails = (event.details && typeof event.details === 'object' && event.details[lang]) 
+        ? event.details[lang] 
+        : 'Details not available.';
       return {
         ...event,
+        details: translatedDetails,
         participant_count: participantCount,
         itemType: 'event',
         date: event.date,
@@ -46,7 +50,7 @@ export default async function HomePage({ params }: PageProps) {
   const { lang } = await params;
   const [dict, items] = await Promise.all([
     getDictionary(lang),
-    getHomepageData()
+    getHomepageData(lang)
   ]);
   return (
     <HomePageClient items={items} dict={dict} />

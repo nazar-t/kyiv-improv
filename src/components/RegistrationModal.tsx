@@ -15,7 +15,7 @@ export default function RegistrationModal({ item, onClose, dict }: RegistrationM
   if (!item) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-60 z-50 flex justify-center items-center"
+    <div className="fixed inset-0 backdrop-blur-sm z-50 flex justify-center items-center"
          onClick={onClose}>
       <div className="relative" onClick={e => e.stopPropagation()}>
         <RegistrationForm item={item} onClose={onClose} dict={dict} />

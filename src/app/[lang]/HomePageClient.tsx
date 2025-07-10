@@ -1,15 +1,16 @@
 'use client'; 
 import React, { useState } from 'react';
-import SectionWrapper from '@/components/SectionWrapper';
-import Card from '@/components/Card';
-import RegistrationModal from '@/components/RegistrationModal';
+import { useCallback } from 'react';
 import type { RegistrableItem } from '@/lib/supabaseClient';
 import { Dictionary } from '@/lib/getDictionary';
+import useEmblaCarousel from 'embla-carousel-react';
+import RegistrationModal from '@/components/RegistrationModal';
+import SectionWrapper from '@/components/SectionWrapper';
+import Card from '@/components/Card';
 import Button from '@/components/Button';
 import Carousel from '@/components/Carousel';
-import useEmblaCarousel from 'embla-carousel-react';
-import { useCallback } from 'react';
-
+import InfoModal from '@/components/InfoModal';
+import FaqItem from '@/components/FaqItem';
 
 // Define the props that this client component expects
 interface HomePageClientProps {
@@ -18,7 +19,12 @@ interface HomePageClientProps {
 }
 
 export default function HomePageClient({ items, dict }: HomePageClientProps) {
-  const [selectedItem, setSelectedItem] = useState<RegistrableItem | null>(null);
+  
+  //Modals
+  const [registerItem, setRegisterItem] = useState<RegistrableItem | null>(null);
+  const [infoItem, setInfoItem] = useState<RegistrableItem | null>(null);
+
+  //Newsletter
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const handleNewsletterSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault(); // Prevent the form from causing a page reload
@@ -28,6 +34,8 @@ export default function HomePageClient({ items, dict }: HomePageClientProps) {
     // You could add logic here to show a "Thank you" message.
     setNewsletterEmail(''); // Clear the input field after submission
     };
+
+  //Carousel
   const [eventsEmblaRef, coursesEmblaApi] = useEmblaCarousel({ 
     align: 'start',
     loop: true,
@@ -62,17 +70,57 @@ export default function HomePageClient({ items, dict }: HomePageClientProps) {
   },
 ];
 
+// FAQ
+const faqData = [
+  {
+    category: dict.faq.general_questions,
+    items: [
+      {
+        q: dict.faq.what_is_improv_q,
+        a: dict.faq.what_is_improv_a,
+      },
+      {
+        q: dict.faq.do_i_need_experience_q,
+        a: dict.faq.do_i_need_experience_a,
+      },
+    ],
+  },
+  {
+    category: dict.faq.registration_payment,
+    items: [
+      {
+        q: dict.faq.how_to_sign_up_q,
+        a: dict.faq.how_to_sign_up_a,
+      },
+      {
+        q: dict.faq.payment_methods_q,
+        a: dict.faq.payment_methods_a,
+      },
+    ],
+  },
+  {
+    category: dict.faq.online_in_person,
+    items: [
+      {
+        q: dict.faq.online_in_person_q,
+        a: dict.faq.online_in_person_a,
+      },
+    ],
+  },
+];
+
     return (
     <div className="flex flex-col gap-y-8">
       {/* 1. HIGHLIGHTS CAROUSEL SECTION */}
       <SectionWrapper>
-        <Carousel slides={carouselSlides} options={{ loop: true }} />
+          <Carousel slides={carouselSlides} options={{ loop: true }} />
       </SectionWrapper>
 
       {/* 2. EVENT CALENDAR SECTION (shows, jams, workshops) */}
       <SectionWrapper>
         <div className="container mx-auto py-8 h-full flex flex-col">
-          <div className="relative w-full max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold text-text-light mb-6 text-center">{dict.homepage.upcoming_events}</h2>
+          <div className="relative w-full max-w-7xl mx-auto">
             {/* This is the Embla "viewport" which clips the content */}
             <div className="overflow-hidden" ref={eventsEmblaRef}>
               {/* This is the Embla "container" which holds the slides */}
@@ -84,8 +132,10 @@ export default function HomePageClient({ items, dict }: HomePageClientProps) {
                       title={item.name}
                       imageUrl={"/logo.png"}
                       description={`${item.date} - Price: ${item.price} UAH`}
-                      buttonText={dict.homepage.sign_up}
-                      buttonAction={() => setSelectedItem(item)}
+                      actionText={dict.button.sign_up}
+                      linkText={dict.button.learn_more}
+                      onButtonAction={() => setRegisterItem(item)}
+                      onInfoClick={() => setInfoItem(item)}
                       className="h-[70vh]" // Keep the tall card style
                     />
                   </div>
@@ -113,59 +163,33 @@ export default function HomePageClient({ items, dict }: HomePageClientProps) {
             <Card 
               title={dict.homepage.beginner_improv_title}
               description={dict.homepage.beginner_improv_description}
-              buttonText={dict.homepage.learn_more}
-              buttonLink={`/${dict.lang}/courses`} // Assuming lang is in dict
+              linkText={dict.button.learn_more}
+              buttonLink={`/${dict.lang}/courses`} 
             />
             <Card
               title={dict.homepage.advanced_improv_title}
               description={dict.homepage.advanced_improv_description}
-              buttonText={dict.homepage.learn_more}
-              buttonLink={`/${dict.lang}/courses`} // Assuming lang is in dict
+              linkText={dict.button.learn_more}
+              buttonLink={`/${dict.lang}/courses`} 
             />
           </div>
         </div>
       </SectionWrapper>
 
-      {/* 4. FAQ SECTION */}
+      {/* 4. FAQ SECTION*/} 
       <SectionWrapper>
         <div className="container mx-auto px-8 py-8">
-          <section className="mb-8">
-            <h2 className="text-2xl font-bold text-text-light mb-4">{dict.faq_page.general_questions}</h2>
-            <div className="space-y-4">
-              <div className="bg-primary-black border border-accent-yellow p-4 rounded-lg shadow-lg">
-                <h3 className="text-xl font-bold text-accent-yellow mb-2">{dict.faq_page.what_is_improv_q}</h3>
-                <p className="text-text-light">{dict.faq_page.what_is_improv_a}</p>
+          <h2 className="text-3xl font-bold text-text-light mb-6 text-center">{dict.faq.title}</h2>
+          {faqData.map(item => (
+            <section className="mb-8">
+              <h2 className="text-2xl font-bold text-text-light mb-4">{item.category}</h2>
+              <div className="space-y-4">
+                {item.items.map(i => (
+                    <FaqItem key={i.q} question={i.q} answer={i.a}></FaqItem>
+                ))}
               </div>
-              <div className="bg-primary-black border border-accent-yellow p-4 rounded-lg shadow-lg">
-                <h3 className="text-xl font-bold text-accent-yellow mb-2">{dict.faq_page.do_i_need_experience_q}</h3>
-                <p className="text-text-light">{dict.faq_page.do_i_need_experience_a}</p>
-              </div>
-            </div>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-2xl font-bold text-text-light mb-4">{dict.faq_page.registration_payment}</h2>
-            <div className="space-y-4">
-              <div className="bg-primary-black border border-accent-yellow p-4 rounded-lg shadow-lg">
-                <h3 className="text-xl font-bold text-accent-yellow mb-2">{dict.faq_page.how_to_sign_up_q}</h3>
-                <p className="text-text-light">{dict.faq_page.how_to_sign_up_a}</p>
-              </div>
-              <div className="bg-primary-black border border-accent-yellow p-4 rounded-lg shadow-lg">
-                <h3 className="text-xl font-bold text-accent-yellow mb-2">{dict.faq_page.payment_methods_q}</h3>
-                <p className="text-text-light">{dict.faq_page.payment_methods_a}</p>
-              </div>
-            </div>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-bold text-text-light mb-4">{dict.faq_page.online_in_person}</h2>
-            <div className="space-y-4">
-              <div className="bg-primary-black border border-accent-yellow p-4 rounded-lg shadow-lg">
-                <h3 className="text-xl font-bold text-accent-yellow mb-2">{dict.faq_page.online_in_person_q}</h3>
-                <p className="text-text-light">{dict.faq_page.online_in_person_a}</p>
-              </div>
-            </div>
-          </section>
+            </section>
+          ))}
         </div>
       </SectionWrapper>
 
@@ -200,11 +224,16 @@ export default function HomePageClient({ items, dict }: HomePageClientProps) {
         </div>
       </SectionWrapper>
 
-      {/* REGISTRATION MODAL (Doesn't appear until an item is selected) */}
+      {/* MODALS (Don't appear until an item is selected) */}
       <RegistrationModal 
-        item={selectedItem} 
-        onClose={() => setSelectedItem(null)}
+        item={registerItem} 
+        onClose={() => setRegisterItem(null)}
         dict={dict} 
+      />
+
+      <InfoModal 
+        item={infoItem} 
+        onClose={() => setInfoItem(null)}
       />
     </div>
   );

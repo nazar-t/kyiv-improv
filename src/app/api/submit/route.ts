@@ -121,9 +121,9 @@ export async function POST(request: Request) {
         };
 
         const { data: newParticipant, error: participantError } = await supabaseServer
-            .from('Event Participants') // Use your actual table name
+            .from('Event Participants')
             .insert(participantData)
-            .select() // Select the newly created record
+            .select()
             .single();
 
         if (participantError) {
