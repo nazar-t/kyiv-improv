@@ -15,6 +15,7 @@
     "@supabase/supabase-js": "^2.49.4",
     "axios": "^1.10.0",
     "embla-carousel": "^8.6.0",
+    "embla-carousel-autoplay": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
     "flag-icons": "^7.5.0",
     "js-cookie": "^3.0.5",

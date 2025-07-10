@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import type { EmblaCarouselType, EmblaOptionsType } from 'embla-carousel';
 import Image from 'next/image';
+import Autoplay from 'embla-carousel-autoplay';
 
 type PropType = {
   slides: {
@@ -13,11 +14,16 @@ type PropType = {
     description: string;
   }[];
   options?: EmblaOptionsType;
+  showArrows?: boolean;
+  autoplay?: boolean;
 };
 
 const Carousel: React.FC<PropType> = (props) => {
-  const { slides, options } = props;
-  const [emblaRef, emblaApi] = useEmblaCarousel(options);
+  const { slides, options, showArrows = false, autoplay = true} = props;
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    options, 
+    autoplay ? [Autoplay({ delay: 5000, stopOnInteraction: false })] : []
+  );
   const [prevBtnDisabled, setPrevBtnDisabled] = useState(true);
   const [nextBtnDisabled, setNextBtnDisabled] = useState(true);
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -103,10 +109,12 @@ const Carousel: React.FC<PropType> = (props) => {
           ))}
         </div>
       </div>
-
-      <Arrow onClick={scrollPrev} disabled={prevBtnDisabled} direction="left" />
-      <Arrow onClick={scrollNext} disabled={nextBtnDisabled} direction="right" />
-
+      {showArrows && (
+      <>
+        <Arrow onClick={scrollPrev} disabled={prevBtnDisabled} direction="left" />
+        <Arrow onClick={scrollNext} disabled={nextBtnDisabled} direction="right" />
+      </>
+      )}
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
         {scrollSnaps.map((_, index) => (
           <button
