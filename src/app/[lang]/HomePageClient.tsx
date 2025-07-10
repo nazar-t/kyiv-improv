@@ -180,8 +180,8 @@ const faqData = [
       <SectionWrapper>
         <div className="container mx-auto px-8 py-8">
           <h2 className="text-3xl font-bold text-text-light mb-6 text-center">{dict.faq.title}</h2>
-          {faqData.map(item => (
-            <section className="mb-8">
+          {faqData.map((item, index) => (
+            <section key={index} className="mb-8">
               <h2 className="text-2xl font-bold text-text-light mb-4">{item.category}</h2>
               <div className="space-y-4">
                 {item.items.map(i => (
