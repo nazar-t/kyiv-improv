@@ -88,16 +88,16 @@ export default async function JamsWorkshopsPage({ params }: PageProps) {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold text-accent-yellow text-center mb-12">{dict.jams_workshops_page.title}</h1>
+      <h1 className="text-4xl font-russo text-accent-yellow text-center mb-12">{dict.jams_workshops_page.title}</h1>
 
       <section className="mb-12">
-        <h2 className="text-3xl font-bold text-text-light mb-6 text-center">{dict.jams_workshops_page.upcoming_sessions}</h2>
+        <h2 className="text-3xl font-russo text-text-light mb-6 text-center">{dict.jams_workshops_page.upcoming_sessions}</h2>
         {error && <p className="text-red-500 text-center">{error}</p>}
         {jamsWorkshopsWithCounts.length === 0 && !error && <p className="text-text-light text-center">{dict.jams_workshops_page.no_upcoming_sessions}</p>}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {jamsWorkshopsWithCounts.map(course => (
             <div key={course.id} className="bg-primary-black border border-accent-yellow p-6 rounded-lg shadow-lg">
-              <h3 className="text-2xl font-bold text-accent-yellow mb-2">{course.name} ({course.type})</h3>
+              <h3 className="text-2xl font-russo text-accent-yellow mb-2">{course.name} ({course.type})</h3>
               <p className="text-text-light text-sm mb-2">
                 {course.start_date} - {course.end_date}
               </p>
@@ -108,7 +108,7 @@ export default async function JamsWorkshopsPage({ params }: PageProps) {
                   {course.participant_count >= course.max_capacity && <span className="ml-2 text-red-400">{dict.homepage.full}</span>}
                 </p>
               )}
-              <Link href={`/${lang}/?courseId=${course.id}`} className={`inline-block bg-accent-yellow text-primary-black font-bold py-2 px-4 rounded hover:bg-yellow-600 transition-colors duration-200 ${typeof course.max_capacity === 'number' && course.participant_count >= course.max_capacity ? 'opacity-50 cursor-not-allowed' : ''}`}
+              <Link href={`/${lang}/?courseId=${course.id}`} className={`inline-block bg-accent-yellow text-primary-black font-russo py-2 px-4 rounded hover:bg-yellow-600 transition-colors duration-200 ${typeof course.max_capacity === 'number' && course.participant_count >= course.max_capacity ? 'opacity-50 cursor-not-allowed' : ''}`}
                 aria-disabled={typeof course.max_capacity === 'number' && course.participant_count >= course.max_capacity}
                 tabIndex={typeof course.max_capacity === 'number' && course.participant_count >= course.max_capacity ? -1 : 0}
               >

@@ -123,15 +123,15 @@ export default async function CoursesPage({ params }: PageProps) {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold text-accent-yellow text-center mb-12">{dict.courses_page.title}</h1>
+      <h1 className="text-4xl font-russo text-accent-yellow text-center mb-12">{dict.courses_page.title}</h1>
       <section className="mb-12">
-        <h2 className="text-3xl font-bold text-text-light mb-6 text-center">{dict.courses_page.core_curriculum}</h2>
+        <h2 className="text-3xl font-russo text-text-light mb-6 text-center">{dict.courses_page.core_curriculum}</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {coreCourses.map(course => (
             <div key={course.id} className="bg-primary-black border border-accent-yellow p-6 rounded-lg shadow-lg">
-              <h3 className="text-2xl font-bold text-accent-yellow mb-4">{course.name}</h3>
+              <h3 className="text-2xl font-russo text-accent-yellow mb-4">{course.name}</h3>
               <p className="text-text-light mb-4">{course.description}</p>
-              <h4 className="text-xl font-bold text-accent-yellow mb-2">{dict.courses_page.curriculum}:</h4>
+              <h4 className="text-xl font-russo text-accent-yellow mb-2">{dict.courses_page.curriculum}:</h4>
               <ul className="list-disc list-inside text-text-light mb-4">
                 {course.curriculum.map((item, index) => (
                   <li key={index}>{item}</li>
@@ -140,7 +140,7 @@ export default async function CoursesPage({ params }: PageProps) {
               <p className="text-text-light mb-2">**{dict.courses_page.price}:** {course.price} UAH</p>
               <p className="text-text-light mb-4">**{dict.courses_page.times}:** {course.times}</p>
               {/* Link to main registration form, potentially pre-selecting a course if we implement that */}
-              <Link href={`/${lang}/`} className="inline-block bg-accent-yellow text-primary-black font-bold py-2 px-4 rounded hover:bg-yellow-600 transition-colors duration-200">
+              <Link href={`/${lang}/`} className="inline-block bg-accent-yellow text-primary-black font-russo py-2 px-4 rounded hover:bg-yellow-600 transition-colors duration-200">
                 {dict.courses_page.sign_up_for_this_course}
               </Link>
             </div>
@@ -150,7 +150,7 @@ export default async function CoursesPage({ params }: PageProps) {
 
       {/* Upcoming Jams & Workshops (from Courses table, dynamic) */}
       <section className="mb-12">
-        <h2 className="text-3xl font-bold text-text-light mb-6 text-center">{dict.courses_page.upcoming_jams_workshops}</h2>
+        <h2 className="text-3xl font-russo text-text-light mb-6 text-center">{dict.courses_page.upcoming_jams_workshops}</h2>
         {error && <p className="text-red-500 text-center">{error}</p>}
         {coursesWithCounts.length === 0 && !error && <p className="text-text-light text-center">{dict.courses_page.no_upcoming_jams_workshops}</p>}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -158,7 +158,7 @@ export default async function CoursesPage({ params }: PageProps) {
             .filter(course => course.type === 'jam' || course.type === 'workshop') // Filter by type
             .map(course => (
             <div key={course.id} className="bg-primary-black border border-accent-yellow p-6 rounded-lg shadow-lg">
-              <h3 className="text-2xl font-bold text-accent-yellow mb-2">{course.name} ({course.type})</h3>
+              <h3 className="text-2xl font-russo text-accent-yellow mb-2">{course.name} ({course.type})</h3>
               <p className="text-text-light text-sm mb-2">
                 {course.start_date} - {course.end_date}
               </p>
@@ -170,7 +170,7 @@ export default async function CoursesPage({ params }: PageProps) {
                 </p>
               )}
               {/* Link to main registration form, potentially pre-selecting this course */}
-              <Link href={`/${lang}/?courseId=${course.id}`} className={`inline-block bg-accent-yellow text-primary-black font-bold py-2 px-4 rounded hover:bg-yellow-600 transition-colors duration-200 ${typeof course.max_capacity === 'number' && course.participant_count >= course.max_capacity ? 'opacity-50 cursor-not-allowed' : ''}`}
+              <Link href={`/${lang}/?courseId=${course.id}`} className={`inline-block bg-accent-yellow text-primary-black font-russo py-2 px-4 rounded hover:bg-yellow-600 transition-colors duration-200 ${typeof course.max_capacity === 'number' && course.participant_count >= course.max_capacity ? 'opacity-50 cursor-not-allowed' : ''}`}
                 aria-disabled={typeof course.max_capacity === 'number' && course.participant_count >= course.max_capacity}
                 tabIndex={typeof course.max_capacity === 'number' && course.participant_count >= course.max_capacity ? -1 : 0}
               >

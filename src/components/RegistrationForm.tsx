@@ -68,7 +68,7 @@ export default function RegistrationForm({ item, onClose, dict }: RegistrationFo
 
   return (
      <form onSubmit={handleSubmit} className="space-y-4 bg-white p-6 rounded-lg shadow-xl text-gray-800">
-        <h2 className="text-2xl font-bold text-gray-900">{item.name}</h2>
+        <h2 className="text-2xl font-russo text-gray-900">{item.name}</h2>
         <p className="text-lg">{item.price} UAH</p>
         <hr/>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

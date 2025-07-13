@@ -102,7 +102,7 @@ const Carousel: React.FC<PropType> = (props) => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
               <div className="absolute bottom-0 left-0 p-8 text-white">
-                <h3 className="text-2xl md:text-4xl font-bold text-accent-yellow">{slide.title}</h3>
+                <h3 className="text-2xl md:text-4xl font-russo text-accent-yellow">{slide.title}</h3>
                 <p className="mt-2 text-base md:text-lg max-w-2xl">{slide.description}</p>
               </div>
             </div>

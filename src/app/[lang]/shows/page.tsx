@@ -88,16 +88,16 @@ export default async function ShowsPage({ params }: PageProps) {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold text-accent-yellow text-center mb-12">{dict.shows_page.title}</h1>
+      <h1 className="text-4xl font-russo text-accent-yellow text-center mb-12">{dict.shows_page.title}</h1>
 
       <section className="mb-12">
-        <h2 className="text-3xl font-bold text-text-light mb-6 text-center">{dict.shows_page.public_performances}</h2>
+        <h2 className="text-3xl font-russo text-text-light mb-6 text-center">{dict.shows_page.public_performances}</h2>
         {error && <p className="text-red-500 text-center">{error}</p>}
         {showsWithCounts.length === 0 && !error && <p className="text-text-light text-center">{dict.shows_page.no_upcoming_shows}</p>}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {showsWithCounts.map(event => (
             <div key={event.id} className="bg-primary-black border border-accent-yellow p-6 rounded-lg shadow-lg">
-              <h3 className="text-2xl font-bold text-accent-yellow mb-2">{event.name}</h3>
+              <h3 className="text-2xl font-russo text-accent-yellow mb-2">{event.name}</h3>
               <p className="text-text-light text-sm mb-2">
                 {event.date} {event.time}
               </p>
@@ -108,7 +108,7 @@ export default async function ShowsPage({ params }: PageProps) {
                   {event.participant_count >= event.max_capacity && <span className="ml-2 text-red-400">{dict.homepage.full}</span>}
                 </p>
               )}
-              <Link href={`/${lang}/events/${event.id}`} className={`inline-block bg-accent-yellow text-primary-black font-bold py-2 px-4 rounded hover:bg-yellow-600 transition-colors duration-200 ${typeof event.max_capacity === 'number' && event.participant_count >= event.max_capacity ? 'opacity-50 cursor-not-allowed' : ''}`}
+              <Link href={`/${lang}/events/${event.id}`} className={`inline-block bg-accent-yellow text-primary-black font-russo py-2 px-4 rounded hover:bg-yellow-600 transition-colors duration-200 ${typeof event.max_capacity === 'number' && event.participant_count >= event.max_capacity ? 'opacity-50 cursor-not-allowed' : ''}`}
                 aria-disabled={typeof event.max_capacity === 'number' && event.participant_count >= event.max_capacity}
                 tabIndex={typeof event.max_capacity === 'number' && event.participant_count >= event.max_capacity ? -1 : 0}
               >

@@ -20,7 +20,7 @@ export default function InfoModal({ item, onClose }: InfoModalProps) {
         className="relative bg-white p-6 rounded-lg shadow-xl text-gray-800 max-w-lg w-full" 
         onClick={e => e.stopPropagation()}
       >
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">{item.name}</h2>
+        <h2 className="text-2xl font-russo text-gray-900 mb-2">{item.name}</h2>
         <p className="text-lg text-gray-700 mb-4">{item.price} UAH</p>
         <hr className="mb-4" />
         <div className="text-gray-800 space-y-2">

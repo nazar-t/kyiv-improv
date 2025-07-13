@@ -65,7 +65,7 @@ export default function Header({ dict, currentLocale }: HeaderProps) {
         {/* Logo with Text (visible on desktop) */}
         <div className="hidden md:flex items-center">
           <Image src="/logo.png" alt="Logo" width={75} height={75} />
-          <span className="ml-3 text-xl font-bold text-accent-yellow">{dict.header.improv_club}</span>
+          <span className="ml-3 text-xl font-russo text-accent-yellow">{dict.header.improv_club}</span>
         </div>
       </div>
 
@@ -92,7 +92,7 @@ export default function Header({ dict, currentLocale }: HeaderProps) {
       <div className="flex-1 flex justify-end">
           {/* Language switcher */}
           <div className="relative w-fit">
-            <button onClick={() => setDropdownOpen(!dropdownOpen)}className="flex w-full items-center justify-between p-2 space-x-4 font-bold text-text-light hover:text-accent-yellow transition-colors duration-200 focus:outline-none">
+            <button onClick={() => setDropdownOpen(!dropdownOpen)}className="flex w-full items-center justify-between p-2 space-x-4 font-russo text-text-light hover:text-accent-yellow transition-colors duration-200 focus:outline-none">
               <div className="flex items-center">
                 <span className={`fi fi-${currentLocaleData.flagCode} fis w-6 h-4 rounded shadow-md`}></span>
               </div>

@@ -158,7 +158,7 @@ const faqData = [
       {/* 3. COURSES SECTION */}
       <SectionWrapper>
         <div className="container mx-auto py-8 h-full flex flex-col">
-          <h2 className="text-3xl font-bold text-text-light mb-6 text-center">{dict.homepage.our_core_courses}</h2>
+          <h2 className="text-3xl font-russo text-text-light mb-6 text-center">{dict.homepage.our_core_courses}</h2>
           <div className='grid grid-cols-1 md:grid-cols-2 gap-8 mx-auto'>
             <Card 
               title={dict.homepage.beginner_improv_title}
@@ -179,10 +179,10 @@ const faqData = [
       {/* 4. FAQ SECTION*/} 
       <SectionWrapper>
         <div className="container mx-auto px-8 py-8">
-          <h2 className="text-3xl font-bold text-text-light mb-6 text-center">{dict.faq.title}</h2>
+          <h2 className="text-3xl font-russo text-text-light mb-6 text-center">{dict.faq.title}</h2>
           {faqData.map((item, index) => (
             <section key={index} className="mb-8">
-              <h2 className="text-2xl font-bold text-text-light mb-4">{item.category}</h2>
+              <h2 className="text-2xl font-russo text-text-light mb-4">{item.category}</h2>
               <div className="space-y-4">
                 {item.items.map(i => (
                     <FaqItem key={i.q} question={i.q} answer={
@@ -197,16 +197,16 @@ const faqData = [
       {/* 5. CONTACTS SECTION */}
       <SectionWrapper>
         <div className="container mx-auto py-8">
-          <h2 className="text-3xl font-bold text-text-light mb-6 text-center">{dict.homepage.contact_us_title}</h2>
+          <h2 className="text-3xl font-russo text-text-light mb-6 text-center">{dict.homepage.contact_us_title}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-gray-700 p-6 rounded-lg text-text-light">
-              <h3 className="text-xl font-bold mb-2">{dict.homepage.location_info_title}</h3>
+              <h3 className="text-xl font-russo mb-2">{dict.homepage.location_info_title}</h3>
               <p>{dict.homepage.location}: {dict.homepage.address}</p>
               <p>{dict.homepage.phone}: +380662273790</p>
               <p>{dict.homepage.email}: info@coolcats.com.ua</p>
             </div>
             <div className="bg-gray-700 p-6 rounded-lg text-text-light">
-              <h3 className="text-xl font-bold mb-2">{dict.homepage.newsletter_signup_title}</h3>
+              <h3 className="text-xl font-russo mb-2">{dict.homepage.newsletter_signup_title}</h3>
               <p>{dict.homepage.newsletter_signup_description}</p>
               <form className="mt-4">
                 <input

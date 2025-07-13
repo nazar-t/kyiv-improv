@@ -18,7 +18,7 @@ export default async function MerchPage({ params }: PageProps) {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold text-accent-yellow text-center mb-12">{dict.merch_page.title}</h1>
+      <h1 className="text-4xl font-russo text-accent-yellow text-center mb-12">{dict.merch_page.title}</h1>
 
       <section className="text-center">
         <p className="text-text-light text-lg mb-4">
@@ -30,21 +30,21 @@ export default async function MerchPage({ params }: PageProps) {
             <div className="w-full h-48 bg-gray-700 flex items-center justify-center text-text-light mb-4">
               {dict.merch_page.merch_item_1_title}
             </div>
-            <h3 className="text-xl font-bold text-accent-yellow mb-2">{dict.merch_page.merch_item_1_title}</h3>
+            <h3 className="text-xl font-russo text-accent-yellow mb-2">{dict.merch_page.merch_item_1_title}</h3>
             <p className="text-text-light">{dict.merch_page.merch_item_1_description}</p>
           </div>
           <div className="bg-primary-black border border-accent-yellow p-6 rounded-lg shadow-lg">
             <div className="w-full h-48 bg-gray-700 flex items-center justify-center text-text-light mb-4">
               {dict.merch_page.merch_item_2_title}
             </div>
-            <h3 className="text-xl font-bold text-accent-yellow mb-2">{dict.merch_page.merch_item_2_title}</h3>
+            <h3 className="text-xl font-russo text-accent-yellow mb-2">{dict.merch_page.merch_item_2_title}</h3>
             <p className="text-text-light">{dict.merch_page.merch_item_2_description}</p>
           </div>
           <div className="bg-primary-black border border-accent-yellow p-6 rounded-lg shadow-lg">
             <div className="w-full h-48 bg-gray-700 flex items-center justify-center text-text-light mb-4">
               {dict.merch_page.merch_item_3_title}
             </div>
-            <h3 className="text-xl font-bold text-accent-yellow mb-2">{dict.merch_page.merch_item_3_title}</h3>
+            <h3 className="text-xl font-russo text-accent-yellow mb-2">{dict.merch_page.merch_item_3_title}</h3>
             <p className="text-text-light">{dict.merch_page.merch_item_3_description}</p>
           </div>
         </div>

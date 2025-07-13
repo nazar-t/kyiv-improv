@@ -8,7 +8,7 @@ const UnderConstruction: React.FC = () => {
         <div className="mb-6 flex justify-center">
             <Image src="/logo.png" alt="Company Logo" width={150} height={150} className="object-contain"/>        
           </div>
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+        <h1 className="text-3xl md:text-4xl font-russo text-gray-800 mb-4">
           Сайт у розробці
         </h1>
         <p className="text-gray-600 mb-6 text-lg">
