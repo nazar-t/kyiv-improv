@@ -16,5 +16,13 @@
   --color-accent-yellow: #FFD700;
   --color-text-light: #f0f0f0;
   --color-text-dark: #333333;
-  --font-mono: "Roboto Mono", monospace;
+  --font-family-mono: var(--font-roboto-mono);
+}
+
+body {
+  font-family: var(--font-family-mono);
+}
+
+.font-russo {
+  font-family: var(--font-russo-one);
 }

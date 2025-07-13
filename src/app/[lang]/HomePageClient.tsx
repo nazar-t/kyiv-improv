@@ -119,7 +119,7 @@ const faqData = [
       {/* 2. EVENT CALENDAR SECTION (shows, jams, workshops) */}
       <SectionWrapper>
         <div className="container mx-auto py-8 h-full flex flex-col">
-          <h2 className="text-3xl font-bold text-text-light mb-6 text-center">{dict.homepage.upcoming_events}</h2>
+          <h2 className="text-3xl font-russo text-text-light mb-6 text-center">{dict.homepage.upcoming_events}</h2>
           <div className="relative w-full max-w-7xl mx-auto">
             {/* This is the Embla "viewport" which clips the content */}
             <div className="overflow-hidden" ref={eventsEmblaRef}>
@@ -185,7 +185,8 @@ const faqData = [
               <h2 className="text-2xl font-bold text-text-light mb-4">{item.category}</h2>
               <div className="space-y-4">
                 {item.items.map(i => (
-                    <FaqItem key={i.q} question={i.q} answer={i.a}></FaqItem>
+                    <FaqItem key={i.q} question={i.q} answer={
+                      i.a}></FaqItem>
                 ))}
               </div>
             </section>

@@ -1,13 +1,20 @@
 import '@/app/globals.css';
-import { Roboto_Mono } from 'next/font/google'; // Import Roboto Mono
+import { Roboto_Mono, Russo_One } from 'next/font/google'; // Import Roboto Mono
 import Header from '@/components/Header'; // Import the Header component
 import UnderConstruction from '@/components/UnderConstruction';
 import React from 'react'; // Ensure React is imported
 import { getDictionary } from '@/lib/getDictionary'; // Import getDictionary
 
 const roboto_mono = Roboto_Mono({
-  subsets: ['latin'],
-  variable: '--font-roboto-mono', // Define as a CSS variable
+  subsets: ['latin', 'cyrillic'],
+  variable: '--font-roboto-mono', 
+});
+
+const russo_one = Russo_One({
+  subsets: ['latin', 'cyrillic'],
+  weight: '400',
+  display: 'swap', 
+  variable: '--font-russo-one', 
 });
 
 export const metadata = {
@@ -26,8 +33,8 @@ export default async function RootLayout({children, params,}: {children: React.R
   const isMaintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === 'true';
 
   return (
-    <html lang={lang} className={`${roboto_mono.variable}`}>
-      <body className="bg-primary-black text-text-light font-mono antialiased flex flex-col min-h-screen">
+    <html lang={lang} className={`${roboto_mono.variable} ${russo_one.variable}`}>
+      <body className="bg-primary-black text-text-light antialiased flex flex-col min-h-screen">
         {isMaintenanceMode ? 
           <UnderConstruction /> : (
           <>
