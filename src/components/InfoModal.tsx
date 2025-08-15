@@ -26,6 +26,7 @@ export default function InfoModal({ item, onClose }: InfoModalProps) {
         <div className="text-gray-800 space-y-2">
           <p><strong>Date:</strong> {item.date}</p>
           <p>{item.details || 'More details will be available soon.'}</p>
+          <p><strong>Duration</strong>: 2 months, 8 classes, 3 hours each</p>
         </div>
         <button 
           onClick={onClose} 

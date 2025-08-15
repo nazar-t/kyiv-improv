@@ -17,9 +17,9 @@ interface CardProps {
 
 const Card: React.FC<CardProps> = ({ imageUrl, title, description, actionText, linkText, buttonLink, onButtonAction, onInfoClick, className }) => {
   return (
-<div className={twMerge(`bg-primary-black border border-accent-yellow p-4 rounded-lg shadow-lg flex flex-col overflow-hidden`, className)}>
+<div className={twMerge(`bg-gray-200 text-text-dark p-4 rounded-lg shadow-lg flex flex-col overflow-hidden`, className)}>
       {imageUrl && (
-        <div className="relative w-ful h-2/5 flex-shrink-0">
+        <div className="relative w-ful flex-grow flex-shrink-0">
           <Image
             src={imageUrl}
             alt={title}
@@ -28,20 +28,20 @@ const Card: React.FC<CardProps> = ({ imageUrl, title, description, actionText, l
           />
         </div>
       )}
-      <div className="flex-grow flex flex-col justify-between p-4">
+      <div className="flex flex-col justify-between p-4">
         <div>
-          <h3 className="text-xl font-bold text-accent-yellow mb-2">{title}</h3>
-          <p className="text-text-light mb-4">{description}</p>
+          <h3 className="text-xl font-bold text-red-600 mb-2">{title}</h3>
+          <p className=" mb-4">{description}</p>
         </div>
         <div className="mt-auto flex justify-center gap-4">
           {onInfoClick && (
-            <Button onClick={onInfoClick}>{linkText}</Button>
+            <Button onClick={onInfoClick} className='text-text-light bg-red-600'>{linkText}</Button>
           )}
           {onButtonAction && (
-            <Button onClick={onButtonAction}>{actionText}</Button>
+            <Button onClick={onButtonAction} className='text-text-light bg-red-600'>{actionText}</Button>
           )}
           {buttonLink && (
-            <Button href={buttonLink}>{linkText}</Button>
+            <Button href={buttonLink} className='text-text-light bg-red-600'>{linkText}</Button>
           )}
         </div>
       </div>

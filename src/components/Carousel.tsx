@@ -91,12 +91,12 @@ const Carousel: React.FC<PropType> = (props) => {
       <div className="overflow-hidden" ref={emblaRef}>
         <div className="flex">
           {slides.map((slide, index) => (
-            <div className="relative flex-[0_0_100%] aspect-video" key={index}>
+            <div className="relative flex-[0_0_100%] aspect-square md:aspect-video" key={index}>
               <Image
                 src={slide.src}
                 alt={slide.alt}
                 fill
-                className="object-cover"
+                className="object-contain"
                 sizes="100vw"
                 priority={index === 0}
               />

@@ -4,6 +4,8 @@ import { supabaseServer } from '@/lib/supabaseServerClient';
 import type { RegistrableItem } from '@/lib/supabaseClient';
 import HomePageClient from "@/app/[lang]/HomePageClient";
 
+export const revalidate = 86400;
+
 async function getHomepageData(lang: string): Promise<RegistrableItem[]> {
   try {
     const { data: eventsData, error: eventsError } = await supabaseServer

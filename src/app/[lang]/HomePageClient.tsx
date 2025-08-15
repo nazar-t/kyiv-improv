@@ -230,6 +230,7 @@ const faqData = [
         item={registerItem} 
         onClose={() => setRegisterItem(null)}
         dict={dict} 
+        registrationType="event"
       />
 
       <InfoModal 

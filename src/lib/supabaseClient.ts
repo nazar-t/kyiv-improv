@@ -33,25 +33,24 @@ export interface Event { // This is for spectator events
   date?: string | null; // Assuming date type maps to string initially
   time?: string | null; // Assuming time type maps to string initially
   price: number; // Assuming numeric maps to number
-  max_capacity?: number | null; // Optional field
-  created_at?: string;
+  max_capacity?: number | null; 
+  type: 'show' | 'workshop' | 'jam' | 'other';
 }
 
 export interface EventWithCount extends Event {
   participant_count: number;
 }
 
-// New interface for Courses table (student offerings: jams, workshops, courses)
 export interface Course {
   id: number;
-  name: string;
-  start_date?: string | null; // Assuming date type maps to string
-  end_date?: string | null;   // Assuming date type maps to string
-  price: number; // Assuming numeric maps to number
-  type: string; // e.g., 'jam', 'workshop', 'course'
-  max_capacity?: number | null; // Optional field
-  created_at?: string; // Assuming you'll add this for tracking
+  start_date: string;
+  end_date: string;
+  max_capacity: number;
+  level?: number;
+  instructor?: string | null;
+  location?: string | null;
 }
+
 
 export interface RegistrableItem {
   id: number;

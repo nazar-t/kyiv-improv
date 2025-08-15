@@ -64,7 +64,13 @@
     "advanced_curriculum_week_4": "Тиждень 4: Довгоформатні Структури (наприклад, Гарольд)",
     "advanced_curriculum_week_5": "Тиждень 5: Тематична Гра",
     "advanced_curriculum_week_6": "Тиждень 6: Виступ та Зворотний Зв'язок",
-    "advanced_times": "Четвер 19:00 - 21:00"
+    "advanced_times": "Четверги 19:00 - 21:00",
+    "see_classes": "Показати доступні класи",
+    "hide_classes": "Сховати доступні класи",
+    "coming_soon": "Незабаром",
+    "available_classes": "Доступні класи",
+    "no_upcoming_courses": "Наразі немає запланованих курсів.",
+    "duration": "Тривалість"
   },
   "jams_workshops_page": {
     "title": "Джеми та Воркшопи",

@@ -22,7 +22,6 @@ export const metadata = {
   description: 'Improv theater & school in Kyiv',
 };
 
-// Add generateStaticParams to define supported locales for static generation
 export async function generateStaticParams() {
   return [{ lang: 'en' }, { lang: 'ua' }];
 }

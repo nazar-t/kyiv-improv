@@ -7,13 +7,14 @@ interface ButtonProps{
     children : React.ReactNode;
     type?: 'submit' | 'button' | 'reset';
     href?: string; 
-    className?: string
+    className?: string;
+    disabled?: boolean;
 }
-export default function Button({onClick, children, type='button',href, className} : ButtonProps){
+export default function Button({onClick, children, type='button',href, className, disabled} : ButtonProps){
     const buttonStyles = `
-    w-48 text-center
-    border-1 border-white rounded-xl p-2 
-    hover:border-accent-yellow hover:[filter:drop-shadow(1px_3px_1px_rgba(215,215,0,0.5))] hover:scale-110 
+    w-48 text-center 
+    rounded-full p-2 
+    hover:[filter:drop-shadow(-2px_2px_3px_rgba(0,0,0,0.5))] hover:scale-110 
     cursor-pointer transition-transform duration-200 
     ${className || ''}`;
     
@@ -30,7 +31,6 @@ export default function Button({onClick, children, type='button',href, className
     }
     
     return (
-    <button type={type} onClick={onClick} className={mergedStyles}>{children}</button>
+    <button type={type} onClick={onClick} className={mergedStyles} disabled={disabled}>{children}</button>
     );
 }
-

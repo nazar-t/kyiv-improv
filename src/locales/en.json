@@ -65,7 +65,13 @@
     "advanced_curriculum_week_4": "Week 4: Long-form Structures (e.g., Harold)",
     "advanced_curriculum_week_5": "Week 5: Thematic Play",
     "advanced_curriculum_week_6": "Week 6: Performance & Feedback",
-    "advanced_times": "Thursdays 7:00 PM - 9:00 PM"
+    "advanced_times": "Thursdays 7:00 PM - 9:00 PM",
+    "see_classes": "See Available Classes",
+    "hide_classes": "Hide Available Classes",
+    "coming_soon": "Coming Soon",
+    "available_classes": "Available Classes",
+    "no_upcoming_courses": "No upcoming courses scheduled at this time.",
+    "duration": "Duration"
   },
   "jams_workshops_page": {
     "title": "Jams & Workshops",

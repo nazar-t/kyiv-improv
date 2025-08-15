@@ -67,6 +67,7 @@ export interface Dictionary {
     advanced_curriculum_week_5: string;
     advanced_curriculum_week_6: string;
     advanced_times: string;
+    available_classes: string;
   };
   jams_workshops_page: {
     title: string;

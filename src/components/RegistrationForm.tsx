@@ -1,15 +1,15 @@
 'use client'; 
 import React, { useState, useEffect, FormEvent } from 'react';
-import type { RegistrableItem } from '@/lib/supabaseClient'; 
 import { Dictionary } from '@/lib/getDictionary';
 
 interface RegistrationFormProps {
-  item: RegistrableItem;
+  item: any;
   onClose: () => void;
   dict: Dictionary;
+  registrationType: 'event' | 'course';
 }
 
-export default function RegistrationForm({ item, onClose, dict }: RegistrationFormProps) {
+export default function RegistrationForm({ item, onClose, dict, registrationType }: RegistrationFormProps) {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -34,23 +34,28 @@ export default function RegistrationForm({ item, onClose, dict }: RegistrationFo
     setSubmitStatus('submitting');
     setSubmitError(null);
     try { 
-        // The API call now sends the item's ID and its type
-        const response = await fetch('/api/submit', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
+        const body = {
             firstName,
             lastName,
             email,
             number,
-            selectedEventId: item.id, // Send the type to the API
-          }),
+        };
+
+        if (registrationType === 'event') {
+            body.selectedEventId = item.id;
+        } else {
+            body.selectedCourseId = item.id;
+        }
+
+        const response = await fetch('/api/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
         });
 
         const result = await response.json();
         if (!response.ok) throw new Error(result.error);
         
-        // On success, redirect to LiqPay
         if (result.liqpayData && result.liqpaySignature) {
             setSubmitStatus('success');
             onClose();
@@ -80,7 +85,7 @@ export default function RegistrationForm({ item, onClose, dict }: RegistrationFo
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
             required
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900" // Added text-gray-900
+            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900"
           />
         </div>
         <div>
@@ -91,7 +96,7 @@ export default function RegistrationForm({ item, onClose, dict }: RegistrationFo
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
             required
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900" // Added text-gray-900
+            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900"
           />
         </div>
       </div>
@@ -103,7 +108,7 @@ export default function RegistrationForm({ item, onClose, dict }: RegistrationFo
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900" // Added text-gray-900
+          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900"
         />
       </div>
       <div>
@@ -114,7 +119,7 @@ export default function RegistrationForm({ item, onClose, dict }: RegistrationFo
           value={number}
           onChange={(e) => setNumber(e.target.value)}
           required
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900" // Added text-gray-900
+          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900"
         />
       </div>
       <div className="flex items-center">
