@@ -70,7 +70,26 @@
     "coming_soon": "Незабаром",
     "available_classes": "Доступні класи",
     "no_upcoming_courses": "Наразі немає запланованих курсів.",
-    "duration": "Тривалість"
+    "duration": "Тривалість",
+    "select_class": "Обрати клас"
+  },
+  "days_of_week": {
+    "sunday": "Неділя",
+    "monday": "Понеділок",
+    "tuesday": "Вівторок",
+    "wednesday": "Середа",
+    "thursday": "Четвер",
+    "friday": "П'ятниця",
+    "saturday": "Субота"
+  },
+  "days_of_week_accusative": {
+    "sunday": "Щонеділі",
+    "monday": "Щопонеділка",
+    "tuesday": "Щовівторка",
+    "wednesday": "Щосереди",
+    "thursday": "Щочетверга",
+    "friday": "Щоп'ятниці",
+    "saturday": "Щосуботи"
   },
   "jams_workshops_page": {
     "title": "Джеми та Воркшопи",
@@ -143,6 +162,7 @@
     "please_select_event": "Будь ласка, виберіть подію.",
     "selected_event_not_found": "Вибрану подію не знайдено.",
     "event_full": "Вибачте, ця подія вже заповнена.",
-    "already_registered": "Ви вже зареєстровані на цю подію."
+    "already_registered": "Ви вже зареєстровані на цю подію.",
+    "remember_me": "Запам'ятати мене для наступного разу"
   }
 }

@@ -2,6 +2,8 @@
 import React, { useState, useEffect, FormEvent } from 'react';
 import { Dictionary } from '@/lib/getDictionary';
 
+import Button from './Button';
+
 interface RegistrationFormProps {
   item: any;
   onClose: () => void;
@@ -71,14 +73,39 @@ export default function RegistrationForm({ item, onClose, dict, registrationType
       }
   };
 
+  const getDayOfWeek = (day: number) => {
+    const days = dict.lang === 'ua' ? dict.days_of_week_accusative : dict.days_of_week;
+    switch (day) {
+      case 0: return days.sunday;
+      case 1: return days.monday;
+      case 2: return days.tuesday;
+      case 3: return days.wednesday;
+      case 4: return days.thursday;
+      case 5: return days.friday;
+      case 6: return days.saturday;
+      default: return '';
+    }
+  };
+
+  const formatTime = (time: string) => {
+    return time.slice(0, 5);
+  }
+
   return (
      <form onSubmit={handleSubmit} className="space-y-4 bg-white p-6 rounded-lg shadow-xl text-gray-800">
         <h2 className="text-2xl font-russo text-gray-900">{item.name}</h2>
-        <p className="text-lg">{item.price} UAH</p>
+        {registrationType === 'course' ? (
+          <>
+            <p className="text-lg">{getDayOfWeek(item.day_of_week)}, {formatTime(item.time)}</p>
+            <p className="text-lg">4999 ₴</p>
+          </>
+        ) : (
+          <p className="text-lg">{item.date} {item.time}</p>
+        )}
         <hr/>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">First Name <span className="text-red-500">*</span></label>
+          <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">{dict.form.first_name} <span className="text-red-500">*</span></label>
           <input
             type="text"
             id="firstName"
@@ -89,7 +116,7 @@ export default function RegistrationForm({ item, onClose, dict, registrationType
           />
         </div>
         <div>
-          <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">Last Name <span className="text-red-500">*</span></label>
+          <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">{dict.form.last_name} <span className="text-red-500">*</span></label>
           <input
             type="text"
             id="lastName"
@@ -101,7 +128,7 @@ export default function RegistrationForm({ item, onClose, dict, registrationType
         </div>
       </div>
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email <span className="text-red-500">*</span></label>
+        <label htmlFor="email" className="block text-sm font-medium text-gray-700">{dict.form.email} <span className="text-red-500">*</span></label>
         <input
           type="email"
           id="email"
@@ -112,7 +139,7 @@ export default function RegistrationForm({ item, onClose, dict, registrationType
         />
       </div>
       <div>
-        <label htmlFor="number" className="block text-sm font-medium text-gray-700">Number <span className="text-red-500">*</span></label>
+        <label htmlFor="number" className="block text-sm font-medium text-gray-700">{dict.form.number} <span className="text-red-500">*</span></label>
         <input
           type="text"
           id="number"
@@ -131,14 +158,14 @@ export default function RegistrationForm({ item, onClose, dict, registrationType
           className="h-4 w-4 text-yellow-500 border-gray-300 rounded"
         />
         <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-          Remember me for next time
+          {dict.form.remember_me}
         </label>
       </div>
       <div>
-            <button type="submit" disabled={submitStatus === 'submitting'}
+            <Button type="submit" disabled={submitStatus === 'submitting'}
               className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-black bg-yellow-400 hover:bg-yellow-500 disabled:opacity-50">
               {submitStatus === 'submitting' ? dict.form.processing : dict.form.proceed_to_payment}
-            </button>
+            </Button>
       </div>
       {submitStatus === 'error' && <p className="text-red-600">{submitError}</p>}
     </form>

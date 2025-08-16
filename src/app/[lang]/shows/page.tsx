@@ -99,7 +99,7 @@ export default async function ShowsPage({ params }: PageProps) {
             <div key={event.id} className="bg-primary-black border border-accent-yellow p-6 rounded-lg shadow-lg">
               <h3 className="text-2xl font-russo text-accent-yellow mb-2">{event.name}</h3>
               <p className="text-text-light text-sm mb-2">
-                {event.date} {event.time}
+                {new Date(event.date).toLocaleDateString(lang, { month: 'long', day: 'numeric' })} {event.time}
               </p>
               <p className="text-text-light mb-4">Price: {event.price} UAH</p>
               {typeof event.max_capacity === 'number' && (

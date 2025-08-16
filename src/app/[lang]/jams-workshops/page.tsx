@@ -99,7 +99,7 @@ export default async function JamsWorkshopsPage({ params }: PageProps) {
             <div key={course.id} className="bg-primary-black border border-accent-yellow p-6 rounded-lg shadow-lg">
               <h3 className="text-2xl font-russo text-accent-yellow mb-2">{course.name} ({course.type})</h3>
               <p className="text-text-light text-sm mb-2">
-                {course.start_date} - {course.end_date}
+                {new Date(course.start_date).toLocaleDateString(lang, { month: 'long', day: 'numeric' })} - {new Date(course['end date']).toLocaleDateString(lang, { month: 'long', day: 'numeric' })}
               </p>
               <p className="text-text-light mb-4">{dict.courses_page.price}: {course.price} UAH</p>
               {typeof course.max_capacity === 'number' && (

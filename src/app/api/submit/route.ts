@@ -1,6 +1,17 @@
 import { NextResponse } from 'next/server';
 import { supabaseServer } from '@/lib/supabaseServerClient'; // Use server client
 import type { EventParticipant } from '@/lib/supabaseClient'; // Remove unused Student type
+import { z } from 'zod';
+
+// Define the Zod schema for validation
+const submitSchema = z.object({
+  firstName: z.string().min(1, { message: "First name is required" }),
+  lastName: z.string().min(1, { message: "Last name is required" }),
+  email: z.string().email({ message: "Invalid email address" }),
+  number: z.string().optional(),
+  selectedEventId: z.number().optional(),
+  selectedCourseId: z.number().optional(),
+});
 
 // Define the expected request body structure
 interface SubmitRequestBody {
@@ -8,7 +19,8 @@ interface SubmitRequestBody {
     lastName: string;
     email: string;
     number?: string; // Optional
-    selectedEventId: number;
+    selectedEventId?: number;
+    selectedCourseId?: number;
 }
 
 export async function POST(request: Request) {
@@ -23,137 +35,147 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: 'Invalid request body' }, { status: 400 });
     }
 
-    const { firstName, lastName, email, number, selectedEventId } = requestBody;
+    const validationResult = submitSchema.safeParse(requestBody);
 
-    // Basic validation
-    if (!firstName || !lastName || !email || !selectedEventId) {
-        console.warn("Validation failed: Missing required fields");
-        return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+    if (!validationResult.success) {
+        const errorMessages = Object.values(validationResult.error.flatten().fieldErrors).join(', ');
+        return NextResponse.json({ error: errorMessages }, { status: 400 });
     }
 
+    const { firstName, lastName, email, number, selectedEventId, selectedCourseId } = validationResult.data;
+
     try {
-        console.log(`Processing registration for email: ${email}, event: ${selectedEventId}`);
+        // 1. Find or Create Customer
+        let customerId: number;
 
-        // 1. Find or Create Student
-        let studentId: number;
-
-        // Check if student exists using server client
-        const { data: existingStudent, error: findError } = await supabaseServer
-            .from('Students') // Use your actual table name
+        // Check if customer exists using server client
+        const { data: existingCustomer, error: findError } = await supabaseServer
+            .from('Customers') // Use your actual table name
             .select('id')
             .eq('email', email)
             .maybeSingle(); // Use maybeSingle to handle 0 or 1 result without error
 
         if (findError) {
-            console.error("Error finding student:", findError);
-            throw new Error(`Error checking for existing student: ${findError.message}`);
+            console.error("Error finding customer:", findError);
+            throw new Error(`Error checking for existing customer: ${findError.message}`);
         }
 
-        if (existingStudent) {
-            console.log(`Found existing student with ID: ${existingStudent.id}`);
-            studentId = existingStudent.id;
+        if (existingCustomer) {
+            console.log(`Found existing customer with ID: ${existingCustomer.id}`);
+            customerId = existingCustomer.id;
         } else {
-            console.log(`Creating new student for email: ${email}`);
-            const { data: newStudent, error: createError } = await supabaseServer
-                .from('Students')
+            console.log(`Creating new customer for email: ${email}`);
+            const { data: newCustomer, error: createError } = await supabaseServer
+                .from('Customers')
                 .insert({
                     first_name: firstName,
                     last_name: lastName,
                     email: email,
-                    number: number
+                    phone: number
                 })
                 .select('id')
                 .single(); // Expect exactly one row back
 
             if (createError) {
-                console.error("Error creating student:", createError);
-                throw new Error(`Error creating new student: ${createError.message}`);
+                console.error("Error creating customer:", createError);
+                throw new Error(`Error creating new customer: ${createError.message}`);
             }
-            if (!newStudent) {
-                 console.error("Student creation returned no data");
-                 throw new Error('Failed to create student record.');
+            if (!newCustomer) {
+                 console.error("Customer creation returned no data");
+                 throw new Error('Failed to create customer record.');
             }
-            studentId = newStudent.id;
-            console.log(`Created new student with ID: ${studentId}`);
+            customerId = newCustomer.id;
+            console.log(`Created new customer with ID: ${customerId}`);
         }
 
-        // 2. Check Event Capacity (Server-side check for race conditions) using server client
-        console.log(`Checking capacity for event ID: ${selectedEventId}`);
-        const { data: eventData, error: eventError } = await supabaseServer
-            .from('Events')
-            .select('max_capacity, price') // Also fetch price here for LiqPay later
-            .eq('id', selectedEventId)
-            .single();
+        if (selectedEventId) {
+            // Handle event registration
+            console.log(`Processing event registration for email: ${email}, event: ${selectedEventId}`);
+            const { data: eventData, error: eventError } = await supabaseServer
+                .from('Events')
+                .select('max_capacity, price')
+                .eq('id', selectedEventId)
+                .single();
 
-        if (eventError || !eventData) {
-            console.error("Error fetching event capacity:", eventError);
-            throw new Error(`Could not fetch event details: ${eventError?.message || 'Event not found'}`);
-        }
+            if (eventError || !eventData) {
+                throw new Error(`Could not fetch event details: ${eventError?.message || 'Event not found'}`);
+            }
 
-        if (typeof eventData.max_capacity === 'number') {
-            const { count: currentParticipants, error: countError } = await supabaseServer
+            if (typeof eventData.max_capacity === 'number') {
+                const { count: currentParticipants, error: countError } = await supabaseServer
+                    .from('Event Participants')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('event_id', selectedEventId)
+                    .in('payment_status', ['pending', 'paid']);
+
+                if (countError) {
+                    throw new Error(`Could not count participants: ${countError.message}`);
+                }
+
+                if (currentParticipants !== null && currentParticipants >= eventData.max_capacity) {
+                    return NextResponse.json({ error: 'Sorry, this event is now full.' }, { status: 409 });
+                }
+            }
+
+            const { data: newParticipant, error: participantError } = await supabaseServer
                 .from('Event Participants')
-                .select('*', { count: 'exact', head: true }) // Efficiently get count
-                .eq('event_id', selectedEventId)
-                .in('payment_status', ['pending', 'paid']);
+                .insert({ customer_id: customerId, event_id: selectedEventId, payment_status: 'paid' })
+                .select()
+                .single();
 
-            if (countError) {
-                 console.error("Error counting participants:", countError);
-                 throw new Error(`Could not count participants: ${countError.message}`);
+            if (participantError) {
+                if (participantError.code === '23505') {
+                    return NextResponse.json({ error: 'You are already registered for this event.' }, { status: 409 });
+                }
+                throw new Error(`Error creating participant record: ${participantError.message}`);
             }
 
-            console.log(`Event ${selectedEventId} capacity: ${eventData.max_capacity}, current participants: ${currentParticipants}`);
-            if (currentParticipants !== null && currentParticipants >= eventData.max_capacity) {
-                console.warn(`Event ${selectedEventId} is full. Capacity: ${eventData.max_capacity}, Current: ${currentParticipants}`);
-                return NextResponse.json({ error: 'Sorry, this event is now full.' }, { status: 409 }); // 409 Conflict
+        } else if (selectedCourseId) {
+            // Handle course registration
+            console.log(`Processing course registration for email: ${email}, course: ${selectedCourseId}`);
+            const { data: courseData, error: courseError } = await supabaseServer
+                .from('Courses')
+                .select('max_capacity')
+                .eq('id', selectedCourseId)
+                .single();
+
+            if (courseError || !courseData) {
+                throw new Error(`Could not fetch course details: ${courseError?.message || 'Course not found'}`);
             }
-        } else {
-             console.log(`Event ${selectedEventId} has no capacity limit.`);
-        }
 
+            if (typeof courseData.max_capacity === 'number') {
+                const { count: currentParticipants, error: countError } = await supabaseServer
+                    .from('Course Participants')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('course_id', selectedCourseId)
+                    .in('payment_status', ['pending', 'paid']);
 
-        // 3. Create Event Participant record
-        console.log(`Creating participant record for student ${studentId}, event ${selectedEventId}`);
-        const participantData: Omit<EventParticipant, 'id' | 'registered_at'> = {
-            student_id: studentId,
-            event_id: selectedEventId,
-            payment_status: 'pending' // Initial status
-        };
+                if (countError) {
+                    throw new Error(`Could not count participants: ${countError.message}`);
+                }
 
-        const { data: newParticipant, error: participantError } = await supabaseServer
-            .from('Event Participants')
-            .insert(participantData)
-            .select()
-            .single();
-
-        if (participantError) {
-            // Handle potential unique constraint violation (user already registered)
-            if (participantError.code === '23505') { // PostgreSQL unique violation code
-                 console.warn(`Student ${studentId} already registered for event ${selectedEventId}`);
-                 return NextResponse.json({ error: 'You are already registered for this event.' }, { status: 409 });
+                if (currentParticipants !== null && currentParticipants >= courseData.max_capacity) {
+                    return NextResponse.json({ error: 'Sorry, this course is now full.' }, { status: 409 });
+                }
             }
-            console.error("Error creating participant record:", participantError);
-            throw new Error(`Error creating participant record: ${participantError.message}`);
-        }
-        if (!newParticipant) {
-             console.error("Participant creation returned no data");
-             throw new Error('Failed to create participant record.');
-        }
 
-        console.log("Successfully created participant record:", newParticipant);
+            const { data: newParticipant, error: participantError } = await supabaseServer
+                .from('Course Participants')
+                .insert({ student_id: customerId, course_id: selectedCourseId, payment_status: 'paid' })
+                .select()
+                .single();
 
-        // TODO: Add LiqPay integration here
-        // 1. Get event price from eventData (fetched above)
-        //const eventPrice = eventData.price;
-        // 2. Generate LiqPay payment parameters (amount, currency, order_id (use newParticipant.id), description, etc.)
-        // 3. Generate LiqPay signature
-        // 4. Return LiqPay data/signature to the frontend
+            if (participantError) {
+                if (participantError.code === '23505') {
+                    return NextResponse.json({ error: 'You are already registered for this course.' }, { status: 409 });
+                }
+                throw new Error(`Error creating participant record: ${participantError.message}`);
+            }
+        }
 
         // For now, just return success
         return NextResponse.json({
-            message: 'Registration successful, proceed to payment.',
-            participantId: newParticipant.id, // Send back the ID for reference
-            // We might need to send LiqPay data/signature back here later
+            message: 'Registration successful'
         }, { status: 201 }); // 201 Created
 
     } catch (error: unknown) { // Use unknown instead of any
