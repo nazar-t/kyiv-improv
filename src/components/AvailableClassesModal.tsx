@@ -4,9 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Dictionary } from '@/lib/getDictionary';
 import { supabase } from '@/lib/supabaseClient';
 import { ClockIcon, MapPinIcon, UserIcon } from '@heroicons/react/24/outline';
-
 import Button from './Button';
-
 import { Course } from '@/lib/supabaseClient';
 
 interface AvailableClassesModalProps {

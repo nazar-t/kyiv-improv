@@ -23,11 +23,26 @@ interface SubmitRequestBody {
     selectedCourseId?: number;
 }
 
+interface LiqpayParams {
+  action: 'pay' | 'hold' | 'subscribe';
+  amount: number;
+  currency: 'UAH' | 'USD' | 'EUR';
+  description: string;
+  order_id: string;
+  version: string;
+  public_key: string;
+  result_url: string;
+  server_url: string;
+}
 //Liqpay helper function
 const createSignature = (privateKey: string, data: string): string => {
     const sha1 = crypto.SHA1(privateKey + data + privateKey);
     return crypto.enc.Base64.stringify(sha1);
 };
+
+const BASE_URL = process.env.VERCEL_URL 
+  ? `https://${process.env.VERCEL_URL}` 
+  : `http://${process.env.NEXT_PUBLIC_BASE_URL}`; 
 
 export async function POST(request: Request) {
     console.log("Received submission request..."); // Log entry point
@@ -56,10 +71,10 @@ export async function POST(request: Request) {
 
         // Check if customer exists using server client
         const { data: existingCustomer, error: findError } = await supabaseServer
-            .from('Customers') // Use your actual table name
+            .from('Customers') 
             .select('id')
             .eq('email', email)
-            .maybeSingle(); // Use maybeSingle to handle 0 or 1 result without error
+            .maybeSingle();
 
         if (findError) {
             console.error("Error finding customer:", findError);
@@ -94,7 +109,7 @@ export async function POST(request: Request) {
             console.log(`Created new customer with ID: ${customerId}`);
         }
 
-        let liqpayParams: any;
+        let liqpayParams: LiqpayParams;
         if (selectedEventId) {
             // Handle event registration
             console.log(`Processing event registration for email: ${email}, event: ${selectedEventId}`);
@@ -140,9 +155,9 @@ export async function POST(request: Request) {
                 description: eventData.name,
                 order_id: `event_${customerId}_${selectedEventId}`,
                 version: '3',
-                public_key: process.env.LIQPAY_PUBLIC_KEY,
-                result_url: `${process.env.NEXT_PUBLIC_BASE_URL}/payment-success`,
-                server_url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/payment-callback`,
+                public_key: (process.env.LIQPAY_PUBLIC_KEY!),
+                result_url: `${BASE_URL}/payment-success`,
+                server_url: `${BASE_URL}/api/payment-callback`,
             };
 
         } else if (selectedCourseId) {
@@ -184,15 +199,17 @@ export async function POST(request: Request) {
             
             liqpayParams = {
                 action: 'pay',
-                amount: process.env.NEXT_PUBLIC_COURSE_PRICE,
+                amount: parseFloat(process.env.NEXT_PUBLIC_COURSE_PRICE!),
                 currency: 'UAH',
                 description: `Курс імпровізації - Рівень ${courseData.level}`,
                 order_id: `course_${customerId}_${selectedCourseId}`,
                 version: '3',
-                public_key: process.env.LIQPAY_PUBLIC_KEY,
-                result_url: `${process.env.NEXT_PUBLIC_BASE_URL}/payment-success`,
-                server_url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/payment-callback`,
+                public_key: (process.env.LIQPAY_PUBLIC_KEY!),
+                result_url: `${BASE_URL}/payment-success`,
+                server_url: `${BASE_URL}/api/payment-callback`,
             };
+        } else {
+            throw new Error("A selectedEventId or selectedCourseId must be provided.");
         }
 
         const data = Buffer.from(JSON.stringify(liqpayParams)).toString('base64');

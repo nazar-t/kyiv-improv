@@ -1,11 +1,8 @@
-// src/components/RegistrationForm.tsx
-
 'use client'; 
 import React, { useState, useEffect, FormEvent } from 'react';
 import { Dictionary } from '@/lib/getDictionary';
 import Button from './Button';
 import { Course, Event } from '@/lib/supabaseClient';
-
 
 interface RegistrationFormProps {
   item: Course | Event;
@@ -14,7 +11,23 @@ interface RegistrationFormProps {
   registrationType: 'event' | 'course';
 }
 
-export default function RegistrationForm({ item, onClose, dict, registrationType }: RegistrationFormProps) {
+interface RegistrationPayload {
+  firstName: string;
+  lastName: string;
+  email: string;
+  number: string;
+  selectedEventId?: number;
+  selectedCourseId?: number;
+}
+
+// This is for the data sent FROM your API back TO the form
+interface ApiResponse {
+  data?: string;
+  signature?: string;
+  error?: string;
+}
+
+export default function RegistrationForm({item, dict, registrationType }: RegistrationFormProps) {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -39,7 +52,7 @@ export default function RegistrationForm({ item, onClose, dict, registrationType
     setSubmitStatus('submitting');
     setSubmitError(null);
     try { 
-        const body: any = {
+        const body: RegistrationPayload = {
             firstName,
             lastName,
             email,
@@ -58,7 +71,7 @@ export default function RegistrationForm({ item, onClose, dict, registrationType
           body: JSON.stringify(body),
         });
 
-        const result = await response.json();
+        const result:ApiResponse = await response.json();
         if (!response.ok) throw new Error(result.error);
         
         // --- NEW: LIQPAY REDIRECT LOGIC ---
@@ -105,7 +118,7 @@ export default function RegistrationForm({ item, onClose, dict, registrationType
   };
 
   const getDayOfWeek = (day: number) => {
-    const days = (dict as any).lang === 'ua' ? (dict as any).days_of_week_accusative : (dict as any).days_of_week;
+    const days = dict.lang === 'ua' ? dict.days_of_week_accusative : dict.days_of_week;
     switch (day) {
       case 0: return days.sunday;
       case 1: return days.monday;
@@ -200,7 +213,7 @@ export default function RegistrationForm({ item, onClose, dict, registrationType
           className="h-4 w-4 text-yellow-500 border-gray-300 rounded"
         />
         <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-          {(dict.form as any).remember_me}
+          {dict.form.remember_me}
         </label>
       </div>
       <div>

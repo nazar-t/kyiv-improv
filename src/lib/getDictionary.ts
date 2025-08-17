@@ -71,6 +71,26 @@ export interface Dictionary {
     duration: string;
     duration_weeks: string;
     coming_soon: string;
+    select_class: string;
+    no_upcoming_courses: string;
+  };
+  days_of_week: {
+    sunday: string;
+    monday: string;
+    tuesday: string;
+    wednesday:string;
+    thursday: string;
+    friday: string;
+    saturday: string;
+  };
+  days_of_week_accusative: {
+    sunday: string;
+    monday: string;
+    tuesday: string;
+    wednesday:string;
+    thursday: string;
+    friday: string;
+    saturday: string;
   };
   jams_workshops_page: {
     title: string;
@@ -144,6 +164,7 @@ export interface Dictionary {
     selected_event_not_found: string;
     event_full: string;
     already_registered: string;
+    remember_me: string;
   };
 }
 

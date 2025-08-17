@@ -1,8 +1,8 @@
 import React from 'react';
-import Link from 'next/link';
-import { supabaseServer } from '@/lib/supabaseServerClient';
-import type { Course } from '@/lib/supabaseClient';
-import { getDictionary, Dictionary } from '@/lib/getDictionary'; 
+//import Link from 'next/link';
+//import { supabaseServer } from '@/lib/supabaseServerClient';
+//import type { Course } from '@/lib/supabaseClient';
+import { Dictionary } from '@/lib/getDictionary'; 
 /*
 export const revalidate = 60; // Revalidate page every 60 seconds
 
@@ -83,8 +83,7 @@ interface PageProps {
 }
 
 export default async function JamsWorkshopsPage({ params }: PageProps) {
-  const { dict,lang } = await params;
-  const typedLang = lang as 'en' | 'ua';
+  const {dict} = await params;
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-4xl font-russo text-accent-yellow text-center mb-12">{dict.jams_workshops_page.title}</h1>

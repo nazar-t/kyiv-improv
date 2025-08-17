@@ -47,12 +47,11 @@ export interface Course {
   end_date: string;
   max_capacity: number;
   level?: number;
-  instructor?: string | null;
-  location?: string | null;
-  day_of_week?: number | null;
+  instructor: string;
+  location: string;
+  day_of_week: number;
   time: string;
 }
-
 
 export interface RegistrableItem {
   id: number;

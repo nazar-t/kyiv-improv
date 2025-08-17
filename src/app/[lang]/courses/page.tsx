@@ -7,8 +7,8 @@ interface CoursesPageProps {
   };
 }
 
-const CoursesPage = async ({ params: { lang } }: CoursesPageProps) => {
-  const dictionary = await getDictionary(lang);
+const CoursesPage = async ({params}: CoursesPageProps) => {
+  const dictionary = await getDictionary(params.lang);
 
   return (
     <CoursesPageClient
