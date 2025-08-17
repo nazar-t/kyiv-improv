@@ -4,8 +4,10 @@ import React from 'react';
 import RegistrationForm from './RegistrationForm';
 import { Dictionary } from '@/lib/getDictionary';
 
+import { Course, Event } from '@/lib/supabaseClient';
+
 interface RegistrationModalProps {
-  item: any | null;
+  item: Course | Event | null;
   onClose: () => void;
   dict: Dictionary;
   registrationType: 'event' | 'course';

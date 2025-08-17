@@ -7,15 +7,17 @@ import { ClockIcon, MapPinIcon, UserIcon } from '@heroicons/react/24/outline';
 
 import Button from './Button';
 
+import { Course } from '@/lib/supabaseClient';
+
 interface AvailableClassesModalProps {
   courseType: string | null;
   onClose: () => void;
-  onSelectClass: (selectedClass: any) => void;
+  onSelectClass: (selectedClass: Course) => void;
   dict: Dictionary;
 }
 
 export default function AvailableClassesModal({ courseType, onClose, onSelectClass, dict }: AvailableClassesModalProps) {
-  const [availableClasses, setAvailableClasses] = useState<any[]>([]);
+  const [availableClasses, setAvailableClasses] = useState<Course[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedClassId, setSelectedClassId] = useState<number | null>(null);
 

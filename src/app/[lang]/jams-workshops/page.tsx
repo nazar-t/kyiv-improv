@@ -2,8 +2,8 @@ import React from 'react';
 import Link from 'next/link';
 import { supabaseServer } from '@/lib/supabaseServerClient';
 import type { Course } from '@/lib/supabaseClient';
-import { getDictionary, Dictionary } from '@/lib/getDictionary'; // Import dictionary utility
-
+import { getDictionary, Dictionary } from '@/lib/getDictionary'; 
+/*
 export const revalidate = 60; // Revalidate page every 60 seconds
 
 interface CourseWithCount extends Course {
@@ -40,7 +40,7 @@ async function getJamsWorkshopsData(lang: 'en' | 'ua'): Promise<{ // Specify exa
     if (courseIds.length > 0) {
       const { data: courseCountsData, error: courseCountsError } = await supabaseServer
         .from('Course Participants')
-        .select('course_id, count: student_id(count)')
+        .select('course_id, count: customer_id(count)')
         .in('course_id', courseIds)
         .in('payment_status', ['pending', 'paid']);
 
@@ -74,50 +74,20 @@ async function getJamsWorkshopsData(lang: 'en' | 'ua'): Promise<{ // Specify exa
     return { jamsWorkshopsWithCounts: [], error: `Failed to load jams & workshops data: ${errorMessage}`, dict: await getDictionary(lang) };
   }
 }
-
+*/
 interface PageProps {
   params: Promise<{
+    dict: Dictionary;
     lang: string;
   }>;
 }
 
 export default async function JamsWorkshopsPage({ params }: PageProps) {
-  const { lang } = await params;
+  const { dict,lang } = await params;
   const typedLang = lang as 'en' | 'ua';
-  const { jamsWorkshopsWithCounts, error, dict } = await getJamsWorkshopsData(typedLang);
-
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-4xl font-russo text-accent-yellow text-center mb-12">{dict.jams_workshops_page.title}</h1>
-
-      <section className="mb-12">
-        <h2 className="text-3xl font-russo text-text-light mb-6 text-center">{dict.jams_workshops_page.upcoming_sessions}</h2>
-        {error && <p className="text-red-500 text-center">{error}</p>}
-        {jamsWorkshopsWithCounts.length === 0 && !error && <p className="text-text-light text-center">{dict.jams_workshops_page.no_upcoming_sessions}</p>}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {jamsWorkshopsWithCounts.map(course => (
-            <div key={course.id} className="bg-primary-black border border-accent-yellow p-6 rounded-lg shadow-lg">
-              <h3 className="text-2xl font-russo text-accent-yellow mb-2">{course.name} ({course.type})</h3>
-              <p className="text-text-light text-sm mb-2">
-                {new Date(course.start_date).toLocaleDateString(lang, { month: 'long', day: 'numeric' })} - {new Date(course['end date']).toLocaleDateString(lang, { month: 'long', day: 'numeric' })}
-              </p>
-              <p className="text-text-light mb-4">{dict.courses_page.price}: {course.price} UAH</p>
-              {typeof course.max_capacity === 'number' && (
-                <p className="text-text-light text-sm mb-4">
-                  {dict.homepage.spots}: {course.participant_count} / {course.max_capacity}
-                  {course.participant_count >= course.max_capacity && <span className="ml-2 text-red-400">{dict.homepage.full}</span>}
-                </p>
-              )}
-              <Link href={`/${lang}/?courseId=${course.id}`} className={`inline-block bg-accent-yellow text-primary-black font-russo py-2 px-4 rounded hover:bg-yellow-600 transition-colors duration-200 ${typeof course.max_capacity === 'number' && course.participant_count >= course.max_capacity ? 'opacity-50 cursor-not-allowed' : ''}`}
-                aria-disabled={typeof course.max_capacity === 'number' && course.participant_count >= course.max_capacity}
-                tabIndex={typeof course.max_capacity === 'number' && course.participant_count >= course.max_capacity ? -1 : 0}
-              >
-                {dict.button.sign_up}
-              </Link>
-            </div>
-          ))}
-        </div>
-      </section>
     </div>
   );
 }

@@ -1,11 +1,14 @@
+// src/components/RegistrationForm.tsx
+
 'use client'; 
 import React, { useState, useEffect, FormEvent } from 'react';
 import { Dictionary } from '@/lib/getDictionary';
-
 import Button from './Button';
+import { Course, Event } from '@/lib/supabaseClient';
+
 
 interface RegistrationFormProps {
-  item: any;
+  item: Course | Event;
   onClose: () => void;
   dict: Dictionary;
   registrationType: 'event' | 'course';
@@ -15,7 +18,7 @@ export default function RegistrationForm({ item, onClose, dict, registrationType
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
-  const [number, setNumber] = useState(''); //TODO change to phone
+  const [number, setNumber] = useState('');
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [rememberMe, setRememberMe] = useState(true); 
@@ -36,7 +39,7 @@ export default function RegistrationForm({ item, onClose, dict, registrationType
     setSubmitStatus('submitting');
     setSubmitError(null);
     try { 
-        const body = {
+        const body: any = {
             firstName,
             lastName,
             email,
@@ -58,12 +61,40 @@ export default function RegistrationForm({ item, onClose, dict, registrationType
         const result = await response.json();
         if (!response.ok) throw new Error(result.error);
         
-        if (result.liqpayData && result.liqpaySignature) {
+        // --- NEW: LIQPAY REDIRECT LOGIC ---
+        // Check for the data and signature from the API response
+        if (result.data && result.signature) {
+            if (rememberMe) {
+                localStorage.setItem('userDetails', JSON.stringify({ firstName, lastName, email, phone: number }));
+            } else {
+                localStorage.removeItem('userDetails');
+            }
             setSubmitStatus('success');
-            onClose();
-            // (Your LiqPay redirect logic here)
+            
+            // Create a hidden form to post to LiqPay's checkout URL
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = 'https://www.liqpay.ua/api/3/checkout';
+            form.acceptCharset = 'utf-8';
+            
+            const dataInput = document.createElement('input');
+            dataInput.type = 'hidden';
+            dataInput.name = 'data';
+            dataInput.value = result.data;
+            form.appendChild(dataInput);
+            
+            const signatureInput = document.createElement('input');
+            signatureInput.type = 'hidden';
+            signatureInput.name = 'signature';
+            signatureInput.value = result.signature;
+            form.appendChild(signatureInput);
+            
+            // Append the form to the body and submit it, which will redirect the user
+            document.body.appendChild(form);
+            form.submit();
         } else {
-            throw new Error('LiqPay data was not received.');
+            // If the API doesn't return the LiqPay data, something went wrong
+            throw new Error('LiqPay data was not received from the server.');
         }
 
       } catch (err: unknown) {
@@ -74,7 +105,7 @@ export default function RegistrationForm({ item, onClose, dict, registrationType
   };
 
   const getDayOfWeek = (day: number) => {
-    const days = dict.lang === 'ua' ? dict.days_of_week_accusative : dict.days_of_week;
+    const days = (dict as any).lang === 'ua' ? (dict as any).days_of_week_accusative : (dict as any).days_of_week;
     switch (day) {
       case 0: return days.sunday;
       case 1: return days.monday;
@@ -91,13 +122,24 @@ export default function RegistrationForm({ item, onClose, dict, registrationType
     return time.slice(0, 5);
   }
 
+  const isCourse = (item: Course | Event): item is Course => registrationType === 'course';
+
+  let title;
+  if (isCourse(item)) {
+    title = item.level === 2 ? dict.courses_page.advanced_improv_title : dict.courses_page.beginner_improv_title;
+  } else {
+    title = item.name;
+  }
+
   return (
      <form onSubmit={handleSubmit} className="space-y-4 bg-white p-6 rounded-lg shadow-xl text-gray-800">
-        <h2 className="text-2xl font-russo text-gray-900">{item.name}</h2>
-        {registrationType === 'course' ? (
+        <h2 className="text-2xl font-russo text-gray-900">{title}</h2>
+        {isCourse(item) ? (
           <>
-            <p className="text-lg">{getDayOfWeek(item.day_of_week)}, {formatTime(item.time)}</p>
-            <p className="text-lg">4999 ₴</p>
+            {item.day_of_week !== null && item.day_of_week !== undefined && item.time &&
+              <p className="text-lg">{getDayOfWeek(item.day_of_week)}, {formatTime(item.time)}</p>
+            }
+            <p className="text-lg">{process.env.NEXT_PUBLIC_COURSE_PRICE}{dict.lang==='en'? ' UAH': ' грн'}</p>
           </>
         ) : (
           <p className="text-lg">{item.date} {item.time}</p>
@@ -158,7 +200,7 @@ export default function RegistrationForm({ item, onClose, dict, registrationType
           className="h-4 w-4 text-yellow-500 border-gray-300 rounded"
         />
         <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-          {dict.form.remember_me}
+          {(dict.form as any).remember_me}
         </label>
       </div>
       <div>

@@ -67,11 +67,12 @@
     "advanced_times": "Четверги 19:00 - 21:00",
     "see_classes": "Показати доступні класи",
     "hide_classes": "Сховати доступні класи",
-    "coming_soon": "Незабаром",
     "available_classes": "Доступні класи",
     "no_upcoming_courses": "Наразі немає запланованих курсів.",
+    "select_class": "Обрати клас",
     "duration": "Тривалість",
-    "select_class": "Обрати клас"
+    "duration_weeks": "8 тижнів",
+    "coming_soon": "Незабаром"
   },
   "days_of_week": {
     "sunday": "Неділя",

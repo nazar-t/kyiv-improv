@@ -12,7 +12,8 @@ interface ButtonProps{
 }
 export default function Button({onClick, children, type='button',href, className, disabled} : ButtonProps){
     const buttonStyles = `
-    w-48 text-center 
+    w-48 text-center text-text-light 
+    bg-red-600 
     rounded-full p-2 
     hover:[filter:drop-shadow(-2px_2px_3px_rgba(0,0,0,0.5))] hover:scale-110 
     cursor-pointer transition-transform duration-200 

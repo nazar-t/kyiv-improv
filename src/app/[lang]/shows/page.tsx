@@ -40,7 +40,7 @@ async function getShowsData(lang: 'en' | 'ua'): Promise<{ // Specify exact types
     if (eventIds.length > 0) {
       const { data: eventCountsData, error: eventCountsError } = await supabaseServer
         .from('Event Participants')
-        .select('event_id, count: student_id(count)')
+        .select('event_id, count: customer_id(count)')
         .in('event_id', eventIds)
         .in('payment_status', ['pending', 'paid']);
 

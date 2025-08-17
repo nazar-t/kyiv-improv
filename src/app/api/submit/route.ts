@@ -1,14 +1,14 @@
 import { NextResponse } from 'next/server';
 import { supabaseServer } from '@/lib/supabaseServerClient'; // Use server client
-import type { EventParticipant } from '@/lib/supabaseClient'; // Remove unused Student type
 import { z } from 'zod';
+import crypto from 'crypto-js';
 
 // Define the Zod schema for validation
 const submitSchema = z.object({
-  firstName: z.string().min(1, { message: "First name is required" }),
-  lastName: z.string().min(1, { message: "Last name is required" }),
+  firstName: z.string().min(2, { message: "First name is required" }),
+  lastName: z.string().min(2, { message: "Last name is required" }),
   email: z.string().email({ message: "Invalid email address" }),
-  number: z.string().optional(),
+  number: z.string().optional(), //TODO should not be optional, and propeerly checked
   selectedEventId: z.number().optional(),
   selectedCourseId: z.number().optional(),
 });
@@ -22,6 +22,12 @@ interface SubmitRequestBody {
     selectedEventId?: number;
     selectedCourseId?: number;
 }
+
+//Liqpay helper function
+const createSignature = (privateKey: string, data: string): string => {
+    const sha1 = crypto.SHA1(privateKey + data + privateKey);
+    return crypto.enc.Base64.stringify(sha1);
+};
 
 export async function POST(request: Request) {
     console.log("Received submission request..."); // Log entry point
@@ -74,7 +80,7 @@ export async function POST(request: Request) {
                     phone: number
                 })
                 .select('id')
-                .single(); // Expect exactly one row back
+                .single();
 
             if (createError) {
                 console.error("Error creating customer:", createError);
@@ -82,25 +88,27 @@ export async function POST(request: Request) {
             }
             if (!newCustomer) {
                  console.error("Customer creation returned no data");
-                 throw new Error('Failed to create customer record.');
+                 throw new Error('Failed to create new record.');
             }
             customerId = newCustomer.id;
             console.log(`Created new customer with ID: ${customerId}`);
         }
 
+        let liqpayParams: any;
         if (selectedEventId) {
             // Handle event registration
             console.log(`Processing event registration for email: ${email}, event: ${selectedEventId}`);
             const { data: eventData, error: eventError } = await supabaseServer
                 .from('Events')
-                .select('max_capacity, price')
+                .select('name, price, max_capacity')
                 .eq('id', selectedEventId)
                 .single();
 
             if (eventError || !eventData) {
                 throw new Error(`Could not fetch event details: ${eventError?.message || 'Event not found'}`);
             }
-
+            
+            //Participant # check
             if (typeof eventData.max_capacity === 'number') {
                 const { count: currentParticipants, error: countError } = await supabaseServer
                     .from('Event Participants')
@@ -116,26 +124,33 @@ export async function POST(request: Request) {
                     return NextResponse.json({ error: 'Sorry, this event is now full.' }, { status: 409 });
                 }
             }
-
-            const { data: newParticipant, error: participantError } = await supabaseServer
+            
+            const { error: insertError } = await supabaseServer
                 .from('Event Participants')
-                .insert({ customer_id: customerId, event_id: selectedEventId, payment_status: 'paid' })
-                .select()
-                .single();
+                .insert({ customer_id: customerId, event_id: selectedEventId, payment_status: 'pending' });
 
-            if (participantError) {
-                if (participantError.code === '23505') {
-                    return NextResponse.json({ error: 'You are already registered for this event.' }, { status: 409 });
-                }
-                throw new Error(`Error creating participant record: ${participantError.message}`);
+            if (insertError) {
+                throw new Error(`Could not create participant: ${insertError.message}`);
             }
+            
+            liqpayParams = {
+                action: 'pay',
+                amount: eventData.price,
+                currency: 'UAH',
+                description: eventData.name,
+                order_id: `event_${customerId}_${selectedEventId}`,
+                version: '3',
+                public_key: process.env.LIQPAY_PUBLIC_KEY,
+                result_url: `${process.env.NEXT_PUBLIC_BASE_URL}/payment-success`,
+                server_url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/payment-callback`,
+            };
 
         } else if (selectedCourseId) {
             // Handle course registration
             console.log(`Processing course registration for email: ${email}, course: ${selectedCourseId}`);
             const { data: courseData, error: courseError } = await supabaseServer
                 .from('Courses')
-                .select('max_capacity')
+                .select('max_capacity, level')
                 .eq('id', selectedCourseId)
                 .single();
 
@@ -159,26 +174,37 @@ export async function POST(request: Request) {
                 }
             }
 
-            const { data: newParticipant, error: participantError } = await supabaseServer
+            const { error: insertError } = await supabaseServer
                 .from('Course Participants')
-                .insert({ student_id: customerId, course_id: selectedCourseId, payment_status: 'paid' })
-                .select()
-                .single();
+                .insert({ customer_id: customerId, course_id: selectedCourseId, payment_status: 'pending' });
 
-            if (participantError) {
-                if (participantError.code === '23505') {
-                    return NextResponse.json({ error: 'You are already registered for this course.' }, { status: 409 });
-                }
-                throw new Error(`Error creating participant record: ${participantError.message}`);
+            if (insertError) {
+                throw new Error(`Could not create participant: ${insertError.message}`);
             }
+            
+            liqpayParams = {
+                action: 'pay',
+                amount: process.env.NEXT_PUBLIC_COURSE_PRICE,
+                currency: 'UAH',
+                description: `Курс імпровізації - Рівень ${courseData.level}`,
+                order_id: `course_${customerId}_${selectedCourseId}`,
+                version: '3',
+                public_key: process.env.LIQPAY_PUBLIC_KEY,
+                result_url: `${process.env.NEXT_PUBLIC_BASE_URL}/payment-success`,
+                server_url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/payment-callback`,
+            };
         }
 
-        // For now, just return success
-        return NextResponse.json({
-            message: 'Registration successful'
-        }, { status: 201 }); // 201 Created
+        const data = Buffer.from(JSON.stringify(liqpayParams)).toString('base64');
+        const signature = createSignature(process.env.LIQPAY_PRIVATE_KEY!, data);
 
-    } catch (error: unknown) { // Use unknown instead of any
+        return NextResponse.json({
+            message: 'Registration successful, proceeding to payment.',
+            data: data,
+            signature: signature,
+        }, { status: 201 });
+
+    } catch (error: unknown) { 
         const message = error instanceof Error ? error.message : 'An unexpected error occurred.';
         console.error("Unhandled error during submission:", error);
         return NextResponse.json({ error: message }, { status: 500 });

@@ -68,14 +68,24 @@
     "advanced_times": "Thursdays 7:00 PM - 9:00 PM",
     "see_classes": "See Available Classes",
     "hide_classes": "Hide Available Classes",
-    "coming_soon": "Coming Soon",
     "available_classes": "Available Classes",
     "no_upcoming_courses": "No upcoming courses scheduled at this time.",
+    "select_class": "Select Class",
     "duration": "Duration",
-    "select_class": "Select Class"
+    "duration_weeks": "8 weeks",
+    "coming_soon": "Coming Soon"
   },
   "days_of_week": {
     "every": "Every",
+    "sunday": "Sunday",
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday"
+  },
+  "days_of_week_accusative": {
     "sunday": "Sunday",
     "monday": "Monday",
     "tuesday": "Tuesday",
