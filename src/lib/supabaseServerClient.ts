@@ -17,6 +17,3 @@ if (!supabaseServiceKey) {
 // This client uses the service_role key and should ONLY be used in server-side code
 // (Server Components, API routes, getServerSideProps) as it bypasses RLS.
 export const supabaseServer = createClient(supabaseUrl, supabaseServiceKey);
-
-// Re-export types if needed, or import them directly where used
-export type { Student, Event, EventParticipant } from './supabaseClient';

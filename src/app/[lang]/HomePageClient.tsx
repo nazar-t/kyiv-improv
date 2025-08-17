@@ -1,7 +1,7 @@
 'use client'; 
 import React, { useState } from 'react';
 import { useCallback } from 'react';
-import type { RegistrableItem } from '@/lib/supabaseClient';
+import { Course, Event } from '@/lib/supabaseClient';
 import { Dictionary } from '@/lib/getDictionary';
 import useEmblaCarousel from 'embla-carousel-react';
 import RegistrationModal from '@/components/RegistrationModal';
@@ -14,24 +14,22 @@ import FaqItem from '@/components/FaqItem';
 
 // Define the props that this client component expects
 interface HomePageClientProps {
-  items: RegistrableItem[];
+  items: Event[];
   dict: Dictionary; 
 }
 
 export default function HomePageClient({ items, dict }: HomePageClientProps) {
   
   //Modals
-  const [registerItem, setRegisterItem] = useState<RegistrableItem | null>(null);
-  const [infoItem, setInfoItem] = useState<RegistrableItem | null>(null);
+  const [registerItem, setRegisterItem] = useState<Course | Event | null>(null);
+  const [infoItem, setInfoItem] = useState<Event | null>(null);
 
   //Newsletter
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const handleNewsletterSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault(); // Prevent the form from causing a page reload
-    // TODO: Add your API call logic here
-    // For now, we'll just log it to the console to show it's working.
+    // TODO: Add API call logic here. For now, we'll just log it to the console to show it's working.
     console.log(`Subscribing email: ${newsletterEmail}`);
-    // You could add logic here to show a "Thank you" message.
     setNewsletterEmail(''); // Clear the input field after submission
     };
 
@@ -227,7 +225,7 @@ const faqData = [
 
       {/* MODALS (Don't appear until an item is selected) */}
       <RegistrationModal 
-        item={registerItem} 
+        item={registerItem!} 
         onClose={() => setRegisterItem(null)}
         dict={dict} 
         registrationType="event"

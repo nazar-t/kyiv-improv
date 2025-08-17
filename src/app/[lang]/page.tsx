@@ -1,12 +1,12 @@
 import React from 'react';
 import { getDictionary } from '@/lib/getDictionary';
 import { supabaseServer } from '@/lib/supabaseServerClient';
-import type { RegistrableItem } from '@/lib/supabaseClient';
+import type { Event } from '@/lib/supabaseClient';
 import HomePageClient from "@/app/[lang]/HomePageClient";
 
 export const revalidate = 86400;
 
-async function getHomepageData(lang: string): Promise<RegistrableItem[]> {
+async function getHomepageData(lang: string): Promise<Event[]> {
   try {
     const { data: eventsData, error: eventsError } = await supabaseServer
       .from('Events')
@@ -20,7 +20,7 @@ async function getHomepageData(lang: string): Promise<RegistrableItem[]> {
       event => supabaseServer.rpc('get_participant_count', { p_event_id: event.id })
     );
     const countResults = await Promise.all(countPromises);
-    const items: RegistrableItem[] = eventsData.map((event, index) => {
+    const items: Event[] = eventsData.map((event, index) => {
       const participantCount = countResults[index].data ?? 0;
       const translatedDetails = (event.details && typeof event.details === 'object' && event.details[lang]) 
         ? event.details[lang] 

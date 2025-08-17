@@ -7,7 +7,7 @@ import { Dictionary } from '@/lib/getDictionary';
 import { Course, Event } from '@/lib/supabaseClient';
 
 interface RegistrationModalProps {
-  item: Course | Event | null;
+item: Course | Event;
   onClose: () => void;
   dict: Dictionary;
   registrationType: 'event' | 'course';

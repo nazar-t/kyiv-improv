@@ -1,10 +1,10 @@
 'use client';
 
 import React from 'react';
-import type { RegistrableItem } from '@/lib/supabaseClient';
+import type { Event } from '@/lib/supabaseClient';
 
 interface InfoModalProps {
-  item: RegistrableItem | null;
+  item: Event | null;
   onClose: () => void;
 }
 
