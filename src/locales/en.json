@@ -39,7 +39,8 @@
     "newsletter_signup_title": "Newsletter Signup",
     "newsletter_signup_description": "Stay updated with our latest news and events!",
     "your_email_placeholder": "Your email",
-    "subscribe_button": "Subscribe"
+    "subscribe_button": "Subscribe",
+    "map_title": "Our Location"
   },
   "courses_page": {
     "title": "Our Courses",
@@ -47,6 +48,9 @@
     "curriculum": "Curriculum",
     "price": "Price",
     "times": "Times",
+    "day_of_week": "Day of the week",
+    "currency": "UAH",
+    "when": "When",
     "sign_up_for_this_course": "Sign Up for this Course",
     "upcoming_jams_workshops": "Upcoming Jams & Workshops",
     "no_upcoming_jams_workshops": "No upcoming jams or workshops found.",
@@ -94,6 +98,20 @@
     "friday": "Friday",
     "saturday": "Saturday"
   },
+  "months_genitive": [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+  ],
   "jams_workshops_page": {
     "title": "Jams & Workshops",
     "upcoming_sessions": "Upcoming Sessions",
@@ -167,5 +185,11 @@
     "event_full": "Sorry, this event is now full.",
     "already_registered": "You are already registered for this event.",
     "remember_me": "Remember me for next time"
+  },
+  "info_modal": {
+    "price": "Price",
+    "date": "Date",
+    "duration": "Duration",
+    "details_soon": "More details will be available soon."
   }
 }

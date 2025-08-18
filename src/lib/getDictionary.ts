@@ -48,6 +48,8 @@ export interface Dictionary {
     curriculum: string;
     price: string;
     times: string;
+    day_of_week: string;
+    currency: string;
     sign_up_for_this_course: string;
     upcoming_jams_workshops: string;
     no_upcoming_jams_workshops: string;
@@ -73,6 +75,7 @@ export interface Dictionary {
     coming_soon: string;
     select_class: string;
     no_upcoming_courses: string;
+    when: string;
   };
   days_of_week: {
     sunday: string;
@@ -92,6 +95,7 @@ export interface Dictionary {
     friday: string;
     saturday: string;
   };
+  months_genitive: string[];
   jams_workshops_page: {
     title: string;
     upcoming_sessions: string;
@@ -165,6 +169,12 @@ export interface Dictionary {
     event_full: string;
     already_registered: string;
     remember_me: string;
+  };
+  info_modal: {
+    price: string;
+    date: string;
+    duration: string;
+    details_soon: string;
   };
 }
 

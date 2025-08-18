@@ -38,7 +38,8 @@
     "newsletter_signup_title": "Підписка на розсилку",
     "newsletter_signup_description": "Будьте в курсі наших останніх новин та подій!",
     "your_email_placeholder": "Ваша електронна пошта",
-    "subscribe_button": "Підписатися"
+    "subscribe_button": "Підписатися",
+    "map_title": "Наша локація"
   },
   "courses_page": {
     "title": "Наші Курси",
@@ -46,6 +47,9 @@
     "curriculum": "Програма",
     "price": "Ціна",
     "times": "Час",
+    "day_of_week": "День тижня",
+    "currency": "грн",
+    "when": "Коли",
     "sign_up_for_this_course": "Зареєструватись на цей Курс",
     "upcoming_jams_workshops": "Майбутні Джеми та Воркшопи",
     "no_upcoming_jams_workshops": "Майбутніх джемів чи воркшопів не знайдено.",
@@ -92,6 +96,20 @@
     "friday": "Щоп'ятниці",
     "saturday": "Щосуботи"
   },
+  "months_genitive": [
+    "січня",
+    "лютого",
+    "березня",
+    "квітня",
+    "травня",
+    "червня",
+    "липня",
+    "серпня",
+    "вересня",
+    "жовтня",
+    "листопада",
+    "грудня"
+  ],
   "jams_workshops_page": {
     "title": "Джеми та Воркшопи",
     "upcoming_sessions": "Майбутні Сесії",
@@ -165,5 +183,11 @@
     "event_full": "Вибачте, ця подія вже заповнена.",
     "already_registered": "Ви вже зареєстровані на цю подію.",
     "remember_me": "Запам'ятати мене для наступного разу"
+  },
+  "info_modal": {
+    "price": "Ціна",
+    "date": "Дата",
+    "duration": "Тривалість",
+    "details_soon": "Більше деталей буде доступно незабаром."
   }
 }

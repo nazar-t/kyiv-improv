@@ -33,8 +33,9 @@ export interface Event { // This is for spectator events
   date: string; 
   time: string; 
   price: number; // Assuming numeric maps to number
-  max_capacity?: number | null; 
+  max_capacity: number; 
   type: 'show' | 'workshop' | 'jam' | 'other';
+  duration: number;
 }
 
 export interface EventWithCount extends Event {

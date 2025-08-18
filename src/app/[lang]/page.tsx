@@ -30,7 +30,7 @@ async function getHomepageData(lang: string): Promise<EventWithCount[]> {
         const isSoldOut = event.max_capacity !== null && (participantCount || 0) >= event.max_capacity;
         const translatedDetails = (event.details && typeof event.details === 'object' && event.details[lang])
           ? event.details[lang]
-          : 'Details not available.';
+          : (event.details && typeof event.details === 'object' && Object.values(event.details)[0]) || 'Details not available.';
 
         return {
           ...event,
