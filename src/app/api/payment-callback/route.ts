@@ -41,33 +41,37 @@ export async function POST(request: Request) {
         
         // 3. Determine if it's a course or event and update the database
         const [type, customerId, itemId] = order_id.split('_');
-        const dbStatus = (status === 'success' || status === 'subscribed') ? 'paid' : status;
         
-        let updateError = null;
+        if (status === 'success' || status === 'subscribed') {
+            const tableName = type === 'course' ? 'Course Participants' : 'Event Participants';
+            const idColumn = type === 'course' ? 'course_id' : 'event_id';
 
-        if (type === 'course') {
             const { error } = await supabaseServer
-                .from('Course Participants')
-                .update({ payment_status: dbStatus })
+                .from(tableName)
+                .update({ payment_status: 'paid' })
                 .eq('customer_id', parseInt(customerId, 10))
-                .eq('course_id', parseInt(itemId, 10));
-            updateError = error;
+                .eq(idColumn, parseInt(itemId, 10));
 
-        } else if (type === 'event') {
+            if (error) {
+                console.error(`LiqPay callback: Error updating database for order ${order_id}:`, error);
+            } else {
+                console.log(`Successfully updated status for order ${order_id} to paid`);
+            }
+        } else if (status === 'failure') {
+            const tableName = type === 'course' ? 'Course Participants' : 'Event Participants';
+            const idColumn = type === 'course' ? 'course_id' : 'event_id';
+
             const { error } = await supabaseServer
-                .from('Event Participants')
-                .update({ payment_status: dbStatus })
+                .from(tableName)
+                .delete()
                 .eq('customer_id', parseInt(customerId, 10))
-                .eq('event_id', parseInt(itemId, 10));
-            updateError = error;
-        } else {
-            console.error(`LiqPay callback: Unknown order_id type: ${type}`);
-        }
+                .eq(idColumn, parseInt(itemId, 10));
 
-        if (updateError) {
-            console.error(`LiqPay callback: Error updating database for order ${order_id}:`, updateError);
-        } else {
-            console.log(`Successfully updated status for order ${order_id} to ${status}`);
+            if (error) {
+                console.error(`LiqPay callback: Error deleting participant for order ${order_id}:`, error);
+            } else {
+                console.log(`Successfully deleted participant for order ${order_id}`);
+            }
         }
 
         // 4. Acknowledge receipt to LiqPay
