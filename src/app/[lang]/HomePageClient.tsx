@@ -1,7 +1,7 @@
 'use client'; 
 import React, { useState } from 'react';
 import { useCallback } from 'react';
-import { Course, Event } from '@/lib/supabaseClient';
+import { Course, EventWithCount } from '@/lib/supabaseClient';
 import { Dictionary } from '@/lib/getDictionary';
 import useEmblaCarousel from 'embla-carousel-react';
 import RegistrationModal from '@/components/RegistrationModal';
@@ -14,15 +14,15 @@ import FaqItem from '@/components/FaqItem';
 
 // Define the props that this client component expects
 interface HomePageClientProps {
-  items: Event[];
+  items: EventWithCount[];
   dict: Dictionary; 
 }
 
 export default function HomePageClient({ items, dict }: HomePageClientProps) {
   
   //Modals
-  const [registerItem, setRegisterItem] = useState<Course | Event | null>(null);
-  const [infoItem, setInfoItem] = useState<Event | null>(null);
+  const [registerItem, setRegisterItem] = useState<Course | EventWithCount | null>(null);
+  const [infoItem, setInfoItem] = useState<EventWithCount | null>(null);
 
   //Newsletter
   const [newsletterEmail, setNewsletterEmail] = useState('');
@@ -135,6 +135,7 @@ const faqData = [
                       onButtonAction={() => setRegisterItem(item)}
                       onInfoClick={() => setInfoItem(item)}
                       className="h-[70vh]" // Keep the tall card style
+                      isSoldOut={item.isSoldOut}
                     />
                   </div>
                 ))}

@@ -39,6 +39,7 @@ export interface Event { // This is for spectator events
 
 export interface EventWithCount extends Event {
   participant_count: number;
+  isSoldOut?: boolean;
 }
 
 export interface Course {

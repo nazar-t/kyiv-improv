@@ -4,9 +4,11 @@ import { supabaseServer } from '@/lib/supabaseServerClient';
 import type { Event } from '@/lib/supabaseClient';
 import HomePageClient from "@/app/[lang]/HomePageClient";
 
-export const revalidate = 86400;
+export const revalidate = 300;
 
-async function getHomepageData(lang: string): Promise<Event[]> {
+import type { EventWithCount } from '@/lib/supabaseClient';
+
+async function getHomepageData(lang: string): Promise<EventWithCount[]> {
   try {
     const { data: eventsData, error: eventsError } = await supabaseServer
       .from('Events')
@@ -15,24 +17,32 @@ async function getHomepageData(lang: string): Promise<Event[]> {
       .order('date', { ascending: true });
 
     if (eventsError) throw eventsError;
-    if (!eventsData) return []; 
-    const countPromises = eventsData.map(
-      event => supabaseServer.rpc('get_participant_count', { p_event_id: event.id })
+    if (!eventsData) return [];
+
+    const items: EventWithCount[] = await Promise.all(
+      eventsData.map(async (event) => {
+        const { data: participantCount, error } = await supabaseServer.rpc('get_participant_count', { p_event_id: event.id });
+        if (error) {
+          console.error(`Failed to get participant count for event ${event.id}:`, error);
+          // Depending on desired behavior, you could return a default or skip this event
+        }
+
+        const isSoldOut = event.max_capacity !== null && (participantCount || 0) >= event.max_capacity;
+        const translatedDetails = (event.details && typeof event.details === 'object' && event.details[lang])
+          ? event.details[lang]
+          : 'Details not available.';
+
+        return {
+          ...event,
+          details: translatedDetails,
+          participant_count: participantCount || 0,
+          isSoldOut: isSoldOut,
+          itemType: 'event',
+          date: event.date,
+        };
+      })
     );
-    const countResults = await Promise.all(countPromises);
-    const items: Event[] = eventsData.map((event, index) => {
-      const participantCount = countResults[index].data ?? 0;
-      const translatedDetails = (event.details && typeof event.details === 'object' && event.details[lang]) 
-        ? event.details[lang] 
-        : 'Details not available.';
-      return {
-        ...event,
-        details: translatedDetails,
-        participant_count: participantCount,
-        itemType: 'event',
-        date: event.date,
-      };
-    });
+
     console.log("Server: Fetched and processed homepage events successfully.");
     return items;
 

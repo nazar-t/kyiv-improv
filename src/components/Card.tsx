@@ -13,13 +13,19 @@ interface CardProps {
   onButtonAction?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   onInfoClick?: () => void; 
   className?: string;
+  isSoldOut?: boolean;
 }
 
-const Card: React.FC<CardProps> = ({ imageUrl, title, description, actionText, linkText, buttonLink, onButtonAction, onInfoClick, className }) => {
+const Card: React.FC<CardProps> = ({ imageUrl, title, description, actionText, linkText, buttonLink, onButtonAction, onInfoClick, className, isSoldOut }) => {
   return (
-<div className={twMerge(`bg-gray-200 text-text-dark p-4 rounded-lg shadow-lg flex flex-col overflow-hidden`, className)}>
+    <div className={twMerge(`bg-gray-200 text-text-dark p-4 rounded-lg shadow-lg flex flex-col overflow-hidden relative`, className)}>
+      {isSoldOut && (
+        <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-10">
+          <span className="text-white text-4xl font-bold transform -rotate-12">SOLD OUT</span>
+        </div>
+      )}
       {imageUrl && (
-        <div className="relative w-ful flex-grow flex-shrink-0">
+        <div className="relative w-full flex-grow flex-shrink-0">
           <Image
             src={imageUrl}
             alt={title}
@@ -38,7 +44,9 @@ const Card: React.FC<CardProps> = ({ imageUrl, title, description, actionText, l
             <Button onClick={onInfoClick} className='text-text-light bg-red-600'>{linkText}</Button>
           )}
           {onButtonAction && (
-            <Button onClick={onButtonAction} className='text-text-light bg-red-600'>{actionText}</Button>
+            <Button onClick={onButtonAction} disabled={isSoldOut} className='text-text-light bg-red-600 disabled:bg-gray-400'>
+              {isSoldOut ? 'Sold Out' : actionText}
+            </Button>
           )}
           {buttonLink && (
             <Button href={buttonLink} className='text-text-light bg-red-600'>{linkText}</Button>
