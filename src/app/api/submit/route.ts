@@ -41,9 +41,10 @@ const createSignature = (privateKey: string, data: string): string => {
     return crypto.enc.Base64.stringify(sha1);
 };
 
-const BASE_URL = process.env.NEXT_PUBLIC_VERCEL_URL 
-  ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}` 
-  : `${process.env.NEXT_PUBLIC_BASE_URL}`;
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL;
+// const BASE_URL = process.env.NEXT_PUBLIC_VERCEL_URL 
+//   ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}` 
+//   : `${process.env.NEXT_PUBLIC_BASE_URL}`;
 
 async function handleRegistration(
     customerId: number,
