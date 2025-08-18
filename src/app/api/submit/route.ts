@@ -40,8 +40,8 @@ const createSignature = (privateKey: string, data: string): string => {
     return crypto.enc.Base64.stringify(sha1);
 };
 
-const BASE_URL = process.env.VERCEL_URL 
-  ? `https://${process.env.VERCEL_URL}` 
+const BASE_URL = process.env.NEXT_PUBLIC_VERCEL_URL 
+  ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}` 
   : `http://${process.env.NEXT_PUBLIC_BASE_URL}`; 
 
 export async function POST(request: Request) {
