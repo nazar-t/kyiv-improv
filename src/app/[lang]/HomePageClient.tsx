@@ -236,13 +236,13 @@ const faqData = [
       <SectionWrapper>
         <div className="container mx-auto py-8">
           <h2 className="text-3xl font-russo mb-6 text-center">{dict.homepage.contact_us_title}</h2>
+
           <div className="bg-gray-100 p-6 rounded-lg text-primary-black">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <h3 className="text-xl font-russo mb-2">{dict.homepage.location_info_title}</h3>
-                <p>{dict.homepage.location}: {dict.homepage.address}</p>
-                <p>{dict.homepage.phone}: +380662273790</p>
-                <p>{dict.homepage.email}: info@coolcats.com.ua</p>
+                <p><span className='font-bold'>{dict.homepage.location}:</span> {dict.homepage.address}</p>
+                <p><span className='font-bold'>{dict.homepage.phone}</span>: +380662273790</p>
+                <p><span className='font-bold'>{dict.homepage.email}:</span> info@coolcats.com.ua</p>
               </div>
               <div>
                 <iframe 

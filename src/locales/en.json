@@ -30,8 +30,7 @@
     "photo": "Photo",
     "spots": "Spots",
     "full": "(Full)",
-    "contact_us_title": "Contact Us",
-    "location_info_title": "Location & Info",
+    "contact_us_title": "How to Reach Us",
     "location": "Address",
     "address": "Tarasa Schevkenka St., Kyiv",
     "phone": "Phone",
@@ -191,5 +190,16 @@
     "date": "Date",
     "duration": "Duration",
     "details_soon": "More details will be available soon."
+  },
+  "footer": {
+    "legal_title": "Legal",
+    "tos": "Terms of Service",
+    "refund_policy": "Refund Policy",
+    "privacy_policy": "Privacy Policy",
+    "social_media_title": "Social Media",
+    "copyright": "Kyiv Improv Theater",
+    "newsletter_placeholder": "Your email",
+    "newsletter_button": "Subscribe",
+    "newsletter_cta": "Subscribe to our monthly newsletter"
   }
 }

@@ -1,6 +1,7 @@
 import '@/app/globals.css';
 import { Roboto_Mono, Russo_One } from 'next/font/google'; // Import Roboto Mono
 import Header from '@/components/Header'; // Import the Header component
+import Footer from '@/components/Footer'; // Import the Footer component
 import UnderConstruction from '@/components/UnderConstruction';
 import React from 'react'; // Ensure React is imported
 import { getDictionary } from '@/lib/getDictionary'; // Import getDictionary
@@ -41,6 +42,7 @@ export default async function RootLayout({children, params,}: {children: React.R
             <main className="flex-grow">
               {children}
             </main>
+            <Footer dict={dict} />
           </>
           )}
       </body> 

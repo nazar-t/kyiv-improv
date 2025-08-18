@@ -32,7 +32,6 @@ export interface Dictionary {
     spots: string;
     full: string;
     contact_us_title: string;
-    location_info_title: string;
     location: string;
     address: string;
     phone: string;
@@ -175,6 +174,17 @@ export interface Dictionary {
     date: string;
     duration: string;
     details_soon: string;
+  };
+  footer: {
+    legal_title: string;
+    tos: string;
+    refund_policy: string;
+    privacy_policy: string;
+    social_media_title: string;
+    copyright: string;
+    newsletter_placeholder: string;
+    newsletter_button: string;
+    newsletter_cta: string;
   };
 }
 
