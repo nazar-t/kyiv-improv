@@ -66,7 +66,6 @@ export async function POST(request: Request) {
 
         if (updateError) {
             console.error(`LiqPay callback: Error updating database for order ${order_id}:`, updateError);
-            // Even if DB update fails, we should still acknowledge LiqPay
         } else {
             console.log(`Successfully updated status for order ${order_id} to ${status}`);
         }

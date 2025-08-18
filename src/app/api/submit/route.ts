@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
-import { supabaseServer } from '@/lib/supabaseServerClient'; // Use server client
+'''import { NextResponse } from 'next/server';
+import { supabaseServer } from '@/lib/supabaseServerClient';
 import { z } from 'zod';
 import crypto from 'crypto-js';
 
@@ -8,7 +8,7 @@ const submitSchema = z.object({
   firstName: z.string().min(2, { message: "First name is required" }),
   lastName: z.string().min(2, { message: "Last name is required" }),
   email: z.string().email({ message: "Invalid email address" }),
-  number: z.string().optional(), //TODO should not be optional, and propeerly checked
+  number: z.string().optional(),
   selectedEventId: z.number().optional(),
   selectedCourseId: z.number().optional(),
 });
@@ -18,7 +18,7 @@ interface SubmitRequestBody {
     firstName: string;
     lastName: string;
     email: string;
-    number?: string; // Optional
+    number?: string;
     selectedEventId?: number;
     selectedCourseId?: number;
 }
@@ -34,7 +34,8 @@ interface LiqpayParams {
   result_url: string;
   server_url: string;
 }
-//Liqpay helper function
+
+// Liqpay helper function
 const createSignature = (privateKey: string, data: string): string => {
     const sha1 = crypto.SHA1(privateKey + data + privateKey);
     return crypto.enc.Base64.stringify(sha1);
@@ -42,10 +43,53 @@ const createSignature = (privateKey: string, data: string): string => {
 
 const BASE_URL = process.env.NEXT_PUBLIC_VERCEL_URL 
   ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}` 
-  : `http://${process.env.NEXT_PUBLIC_BASE_URL}`; 
+  : `http://${process.env.NEXT_PUBLIC_BASE_URL}`;
+
+async function handleRegistration(
+    customerId: number,
+    itemId: number,
+    type: 'event' | 'course'
+) {
+    const tableName = type === 'course' ? 'Course Participants' : 'Event Participants';
+    const idColumn = type === 'course' ? 'course_id' : 'event_id';
+
+    // Check if the user is already registered with a 'paid' status
+    const { data: existingPaidParticipant, error: existingPaidParticipantError } = await supabaseServer
+        .from(tableName)
+        .select('id')
+        .eq('customer_id', customerId)
+        .eq(idColumn, itemId)
+        .eq('payment_status', 'paid')
+        .maybeSingle();
+
+    if (existingPaidParticipantError) {
+        throw new Error(`Could not check for existing participant: ${existingPaidParticipantError.message}`);
+    }
+
+    if (existingPaidParticipant) {
+        return NextResponse.json({ error: `You are already registered for this ${type}.` }, { status: 409 });
+    }
+
+    // Clean up any previous pending registrations for this user and item
+    await supabaseServer
+        .from(tableName)
+        .delete()
+        .eq('customer_id', customerId)
+        .eq(idColumn, itemId)
+        .eq('payment_status', 'pending');
+
+    // Insert the new participant record
+    const { error: insertError } = await supabaseServer
+        .from(tableName)
+        .insert({ customer_id: customerId, [idColumn]: itemId, payment_status: 'pending' });
+
+    if (insertError) {
+        throw new Error(`Could not create participant: ${insertError.message}`);
+    }
+}
 
 export async function POST(request: Request) {
-    console.log("Received submission request..."); // Log entry point
+    console.log("Received submission request...");
 
     let requestBody: SubmitRequestBody;
     try {
@@ -68,10 +112,8 @@ export async function POST(request: Request) {
     try {
         // 1. Find or Create Customer
         let customerId: number;
-
-        // Check if customer exists using server client
         const { data: existingCustomer, error: findError } = await supabaseServer
-            .from('Customers') 
+            .from('Customers')
             .select('id')
             .eq('email', email)
             .maybeSingle();
@@ -88,12 +130,7 @@ export async function POST(request: Request) {
             console.log(`Creating new customer for email: ${email}`);
             const { data: newCustomer, error: createError } = await supabaseServer
                 .from('Customers')
-                .insert({
-                    first_name: firstName,
-                    last_name: lastName,
-                    email: email,
-                    phone: number
-                })
+                .insert({ first_name: firstName, last_name: lastName, email: email, phone: number })
                 .select('id')
                 .single();
 
@@ -111,7 +148,6 @@ export async function POST(request: Request) {
 
         let liqpayParams: LiqpayParams;
         if (selectedEventId) {
-            // Handle event registration
             console.log(`Processing event registration for email: ${email}, event: ${selectedEventId}`);
             const { data: eventData, error: eventError } = await supabaseServer
                 .from('Events')
@@ -123,7 +159,6 @@ export async function POST(request: Request) {
                 throw new Error(`Could not fetch event details: ${eventError?.message || 'Event not found'}`);
             }
             
-            //Participant # check
             if (typeof eventData.max_capacity === 'number') {
                 const { count: currentParticipants, error: countError } = await supabaseServer
                     .from('Event Participants')
@@ -140,12 +175,9 @@ export async function POST(request: Request) {
                 }
             }
             
-            const { error: insertError } = await supabaseServer
-                .from('Event Participants')
-                .insert({ customer_id: customerId, event_id: selectedEventId, payment_status: 'pending' });
-
-            if (insertError) {
-                throw new Error(`Could not create participant: ${insertError.message}`);
+            const registrationResult = await handleRegistration(customerId, selectedEventId, 'event');
+            if (registrationResult) {
+                return registrationResult;
             }
             
             liqpayParams = {
@@ -161,7 +193,6 @@ export async function POST(request: Request) {
             };
 
         } else if (selectedCourseId) {
-            // Handle course registration
             console.log(`Processing course registration for email: ${email}, course: ${selectedCourseId}`);
             const { data: courseData, error: courseError } = await supabaseServer
                 .from('Courses')
@@ -189,12 +220,9 @@ export async function POST(request: Request) {
                 }
             }
 
-            const { error: insertError } = await supabaseServer
-                .from('Course Participants')
-                .insert({ customer_id: customerId, course_id: selectedCourseId, payment_status: 'pending' });
-
-            if (insertError) {
-                throw new Error(`Could not create participant: ${insertError.message}`);
+            const registrationResult = await handleRegistration(customerId, selectedCourseId, 'course');
+            if (registrationResult) {
+                return registrationResult;
             }
             
             liqpayParams = {
@@ -227,3 +255,4 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: message }, { status: 500 });
     }
 }
+''
