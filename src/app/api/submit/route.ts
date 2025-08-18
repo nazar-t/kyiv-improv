@@ -43,7 +43,7 @@ const createSignature = (privateKey: string, data: string): string => {
 
 const BASE_URL = process.env.NEXT_PUBLIC_VERCEL_URL 
   ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}` 
-  : `http://${process.env.NEXT_PUBLIC_BASE_URL}`;
+  : `${process.env.NEXT_PUBLIC_BASE_URL}`;
 
 async function handleRegistration(
     customerId: number,
@@ -56,7 +56,7 @@ async function handleRegistration(
     // Check if the user is already registered with a 'paid' status
     const { data: existingPaidParticipant, error: existingPaidParticipantError } = await supabaseServer
         .from(tableName)
-        .select('id')
+        .select('customer_id')
         .eq('customer_id', customerId)
         .eq(idColumn, itemId)
         .eq('payment_status', 'paid')

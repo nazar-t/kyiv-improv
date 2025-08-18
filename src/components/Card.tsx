@@ -14,16 +14,12 @@ interface CardProps {
   onInfoClick?: () => void; 
   className?: string;
   isSoldOut?: boolean;
+  soldOutText?: string;
 }
 
-const Card: React.FC<CardProps> = ({ imageUrl, title, description, actionText, linkText, buttonLink, onButtonAction, onInfoClick, className, isSoldOut }) => {
+const Card: React.FC<CardProps> = ({ imageUrl, title, description, actionText, linkText, buttonLink, onButtonAction, onInfoClick, className, isSoldOut, soldOutText }) => {
   return (
-    <div className={twMerge(`bg-gray-200 text-text-dark rounded-lg shadow-lg flex flex-col overflow-hidden relative`, className)}>
-      {isSoldOut && (
-        <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-10">
-          <span className="text-white text-4xl font-bold transform -rotate-12">SOLD OUT</span>
-        </div>
-      )}
+    <div className={twMerge(`bg-gray-200 text-text-dark rounded-lg shadow-lg flex flex-col overflow-hidden`, className)}>
       {imageUrl && (
         <div className="relative w-full h-48">
           <Image
@@ -32,6 +28,11 @@ const Card: React.FC<CardProps> = ({ imageUrl, title, description, actionText, l
             fill
             className='object-cover'
           />
+          {isSoldOut && (
+            <div className="absolute inset-0 bg-black/75 flex items-center justify-center z-10">
+              <span className="text-red-500 text-4xl font-bold transform -rotate-33">{soldOutText}</span>
+            </div>
+          )}
         </div>
       )}
       <div className="flex flex-col justify-between p-4 flex-grow">
@@ -45,7 +46,7 @@ const Card: React.FC<CardProps> = ({ imageUrl, title, description, actionText, l
           )}
           {onButtonAction && (
             <Button onClick={onButtonAction} disabled={isSoldOut} className='text-text-light bg-red-600 disabled:bg-gray-400 whitespace-nowrap'>
-              {isSoldOut ? 'Sold Out' : actionText}
+              {isSoldOut ? soldOutText : actionText}
             </Button>
           )}
           {buttonLink && (

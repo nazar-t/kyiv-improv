@@ -171,6 +171,7 @@ const faqData = [
                         onInfoClick={() => setInfoItem(item)}
                         className="h-full"
                         isSoldOut={item.isSoldOut}
+                        soldOutText={dict.homepage.full}
                       />
                     </div>
                   )

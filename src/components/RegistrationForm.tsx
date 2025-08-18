@@ -27,6 +27,39 @@ interface ApiResponse {
   error?: string;
 }
 
+const formatEventDate = (date: string, dict: Dictionary) => {
+  const d = new Date(date);
+  const dayOfMonth = d.getDate();
+  const month = d.getMonth();
+  const dayOfWeek = d.toLocaleDateString(dict.lang === 'ua' ? 'uk-UA' : 'en-US', { weekday: 'short' }).toUpperCase();
+  
+  if (dict.lang === 'ua') {
+    const monthGenitive = dict.months_genitive[month];
+    return `${dayOfMonth} ${monthGenitive}, ${dayOfWeek}`;
+  }
+  
+  const monthName = d.toLocaleDateString('en-US', { month: 'long' });
+  return `${dayOfMonth} ${monthName}, ${dayOfWeek}`;
+};
+
+const formatTime = (time: string, duration: number | null, dict: Dictionary) => {
+  if (!time) return '';
+  const [hours, minutes] = time.split(':').map(Number);
+  const startTime = new Date();
+  startTime.setHours(hours, minutes, 0);
+
+  let endTime;
+  if (duration) {
+    endTime = new Date(startTime.getTime() + duration * 60000);
+  }
+
+  const options: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit' };
+  const formattedStartTime = startTime.toLocaleTimeString(dict.lang === 'ua' ? 'uk-UA' : 'en-US', options);
+  const formattedEndTime = endTime ? endTime.toLocaleTimeString(dict.lang === 'ua' ? 'uk-UA' : 'en-US', options) : '';
+
+  return formattedEndTime ? `${formattedStartTime}-${formattedEndTime}` : formattedStartTime;
+};
+
 export default function RegistrationForm({item, dict, registrationType }: RegistrationFormProps) {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -131,10 +164,6 @@ export default function RegistrationForm({item, dict, registrationType }: Regist
     }
   };
 
-  const formatTime = (time: string) => {
-    return time.slice(0, 5);
-  }
-
   const isCourse = (item: Course | Event): item is Course => registrationType === 'course';
 
   let title;
@@ -150,12 +179,12 @@ export default function RegistrationForm({item, dict, registrationType }: Regist
         {isCourse(item) ? (
           <>
             {item.day_of_week !== null && item.day_of_week !== undefined && item.time &&
-              <p className="text-lg">{getDayOfWeek(item.day_of_week)}, {formatTime(item.time)}</p>
+              <p className="text-lg font-bold">{getDayOfWeek(item.day_of_week)}, {formatTime(item.time, null, dict)}</p>
             }
-            <p className="text-lg">{process.env.NEXT_PUBLIC_COURSE_PRICE}{dict.lang==='en'? ' UAH': ' грн'}</p>
+            <p className="text-lg font-bold">{process.env.NEXT_PUBLIC_COURSE_PRICE}{dict.lang==='en'? ' UAH': ' грн'}</p>
           </>
         ) : (
-          <p className="text-lg">{item.date} {item.time}</p>
+          <p className="text-lg font-bold">{formatEventDate(item.date, dict)}, {formatTime(item.time, (item as Event).duration, dict)}</p>
         )}
         <hr/>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
