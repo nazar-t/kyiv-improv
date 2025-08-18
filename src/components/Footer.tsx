@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Dictionary } from '@/lib/getDictionary';
 import Button from './Button';
 
@@ -15,9 +16,9 @@ const Footer: React.FC<FooterProps> = ({ dict }) => {
           <div className="w-full md:w-1/5 text-center md:text-left mb-4 md:mb-0">
             <h3 className="font-bold mb-2">{dict.footer.legal_title}</h3>
             <ul>
-              <li><a href="/tos" className="transition-transform duration-200 hover:text-yellow-400 hover:scale-110 inline-block">{dict.footer.tos}</a></li>
-              <li><a href="/refund-policy" className="transition-transform duration-200 hover:text-yellow-400 hover:scale-110 inline-block">{dict.footer.refund_policy}</a></li>
-              <li><a href="/privacy-policy" className="transition-transform duration-200 hover:text-yellow-400 hover:scale-110 inline-block">{dict.footer.privacy_policy}</a></li>
+              <li><Link href="/tos" className="transition-transform duration-200 hover:text-yellow-400 hover:scale-110 inline-block">{dict.footer.tos}</Link></li>
+              <li><Link href="/refund-policy" className="transition-transform duration-200 hover:text-yellow-400 hover:scale-110 inline-block">{dict.footer.refund_policy}</Link></li>
+              <li><Link href="/privacy-policy" className="transition-transform duration-200 hover:text-yellow-400 hover:scale-110 inline-block">{dict.footer.privacy_policy}</Link></li>
             </ul>
           </div>
           <div className="w-full md:w-1/5 text-center md:text-left mb-4 md:mb-0">

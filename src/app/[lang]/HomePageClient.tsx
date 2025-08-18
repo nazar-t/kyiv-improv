@@ -7,7 +7,6 @@ import useEmblaCarousel from 'embla-carousel-react';
 import RegistrationModal from '@/components/RegistrationModal';
 import SectionWrapper from '@/components/SectionWrapper';
 import Card from '@/components/Card';
-import Button from '@/components/Button';
 import Carousel from '@/components/Carousel';
 import InfoModal from '@/components/InfoModal';
 import FaqItem from '@/components/FaqItem';

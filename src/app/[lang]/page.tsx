@@ -1,7 +1,6 @@
 import React from 'react';
 import { getDictionary } from '@/lib/getDictionary';
 import { supabaseServer } from '@/lib/supabaseServerClient';
-import type { Event } from '@/lib/supabaseClient';
 import HomePageClient from "@/app/[lang]/HomePageClient";
 
 export const revalidate = 300;
